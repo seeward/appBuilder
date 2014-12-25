@@ -31,10 +31,18 @@
 		border-radius: 7px;
 	}
 
+	#msgBox {
+		position: absolute;
+		left:50px;
+		top:10px;
+		z-index: 10
+	}
+
 </style>
 
 
 <div id="mainPopup">
+	<div id="msgBox" class="alert alert-success" role="alert"></div>
 	<div class="container">
 		<div class="col-md-10">
 <div role="tabpanel">
@@ -44,10 +52,10 @@
     <li role="presentation" class="active"><a href="#js" aria-controls="home" role="tab" data-toggle="tab">JS</a></li>
     <li role="presentation"><a href="#html" aria-controls="profile" role="tab" data-toggle="tab">HTML</a></li>
     <li role="presentation"><a href="#css" aria-controls="messages" role="tab" data-toggle="tab">CSS</a></li>
-    
+    <noscript>
     <li style="margin-top:7px!important"><label style="margin-left:75px" for="libcss">css: </label><input = placeholder="Enter path to css file" type="text" class="form_control" id="libcss" /></li>
-    <li style="margin-top:7px"><label style="margin-left:20px" for="libjs">js: </label><input type="text" placeholder="Enter path to js file" class="form_control" id="libjs" /></li>
-    <li><button class="btn btn-info" style="margin-left:25px" id="go"><span class="glyphicon glyphicon-play"></span></button></li>
+    <li style="margin-top:7px"><label style="margin-left:20px" for="libjs">js: </label><input type="text" placeholder="Enter path to js file" class="form_control" id="libjs" /></li></noscript>
+    <li><button class="btn btn-info" style="margin-left:482px" id="go"><span class="glyphicon glyphicon-play"></span></button></li>
     <li><button class="btn btn-success" id="saver" style="margin-left:15px"><span class="glyphicon glyphicon-floppy-save"></span></button></li>
     <li><button class="btn btn-warning" id="clear" style="margin-left:15px"><span class="glyphicon glyphicon-refresh"></span></button></li>
     <li><button class="btn btn-danger" id="deleter" style="margin-left:15px"><span class="glyphicon glyphicon-remove"></span></a></li>
@@ -73,7 +81,7 @@
 </div>
 
 </div>
-<legend>Output: <button class="btn btn-default" id="desktop" style="margin-left:25px">Desktop</button><button class="btn btn-default" id="tablet" style="margin-left:25px">Tablet</button><button class="btn btn-default" id="mobile" style="margin-left:25px">Mobile</button> <div id="msgBox" class="alert alert-success" role="alert"></div></legend>
+<legend>Output: <button class="btn btn-default" id="desktop" style="margin-left:25px">Desktop</button><button class="btn btn-default" id="tablet" style="margin-left:25px">Tablet</button><button class="btn btn-default" id="mobile" style="margin-left:25px">Mobile</button></legend>
 
 	<section id="output">
 

@@ -1,32 +1,50 @@
 $(document).ready(function() {
+    $(".lined").linedtextarea();
+    // Gather textareas
+    var html_editor = $("#htmlBody"),
+        css_editor = $("#cssBody"),
+        js_editor = $("#jsBody");
+    // Store textarea references to array
+    var editors = [html_editor, css_editor, js_editor];
+
+    // pointer to current note
+
+    var currentNote = "";
 
     var gh = new Octokit({
         username: "seeward",
-        password: "Artworker#1"
+        password: ""
     });
 
     var tempFile = "";
 
-    
+
     var newHold = "";
 
-    var createGist = function(dataToWrite) {
+    var createGist = function(fileName, dataToWrite) {
+        var file = {};
+        var key = fileName;
 
+        file[key] = {
+            content: dataToWrite
+        };
 
-        var files = {
+        console.log("Writing file to GitHub...");
+
+        files = {
             "exportFromAppBuilder.txt": {
                 content: dataToWrite
             }
         };
 
-        gh.getGist().create(files)
+        gh.getGist().create(file)
             .done(function(gist) {
-                console.log(JSON.stringify(gist));
+                //console.log(JSON.stringify(gist));
                 $("#msgBox").html("GIST saved successfully");
                 $("#msgBox").show();
-            setTimeout(function(){
-                $("#msgBox").hide();
-            },2000);
+                setTimeout(function() {
+                    $("#msgBox").hide();
+                }, 2000);
             });
 
 
@@ -41,7 +59,7 @@ $(document).ready(function() {
         $.each(keys, function(i, obj) {
             //console.log(JSON.stringify(obj));
             if (obj != "cache") {
-                console.log(obj);
+                //console.log(obj);
                 eachProject = JSON.parse(window.localStorage.getItem(obj));
                 if (eachProject.html) {
                     holder.push(eachProject);
@@ -60,7 +78,7 @@ $(document).ready(function() {
             saveAs(blob, namer);
         }
 
-        createGist(tempFile);
+        createGist("fullLocalBackup.json", tempFile);
 
     };
 
@@ -68,17 +86,7 @@ $(document).ready(function() {
         exportToGitHub();
     });
 
-    $(".lined").linedtextarea();
-    // Gather textareas
-    var html_editor = $("#htmlBody"),
-        css_editor = $("#cssBody"),
-        js_editor = $("#jsBody");
-    // Store textarea references to array
-    var editors = [html_editor, css_editor, js_editor];
 
-    // pointer to current note
-
-    var currentNote = "";
 
     // func to store cache of unsaved projects
     var cacheLog = function() {
@@ -101,7 +109,8 @@ $(document).ready(function() {
     $("#export").click(function() {
         toFile = prepareSource();
         window.location = "data:application/octet-stream," + escape(toFile);
-        createGist(toFile);
+        createGist(currentNote, toFile);
+        //console.log(currentNote);
     });
 
 
@@ -225,8 +234,8 @@ $(document).ready(function() {
         var html = html_editor.val(),
             css = css_editor.val(),
             js = js_editor.val(),
-            lib = $("#libcss").val();
-        libjs = $("#libjs").val();
+            //lib = $("#libcss").val();
+       // libjs = $("#libjs").val();
         src = '';
 
         // Insert values into src template
@@ -238,12 +247,12 @@ $(document).ready(function() {
         css = '<style>' + css + '</style>';
         src = src.replace('</head>', css + '</head>');
         // Libs css
-        libs = '<link href="' + lib + '" rel="stylesheet"></link>';
-        src = src.replace('</head>', libs + '</head>');
+        //libs = '<link href="' + lib + '" rel="stylesheet"></link>';
+        //src = src.replace('</head>', libs + '</head>');
 
         // libs js
-        libsJS = '<script src="' + libjs + '" type="text/javascript"></script>';
-        src = src.replace('</head>', libsJS + '</head>');
+        //libsJS = '<script src="' + libjs + '" type="text/javascript"></script>';
+        //src = src.replace('</head>', libsJS + '</head>');
         // Javascript
         js = '<script>' + js + '</script>';
         src = src.replace('</body>', js + '</body>');
@@ -313,7 +322,7 @@ $(document).ready(function() {
 
     (function init() {
         //window.localStorage.clear();
-           $("#msgBox").hide();
+        $("#msgBox").hide();
         initLog = "\n<------------- init successful ------------->";
         console.log(initLog);
         restoreFromCache();
