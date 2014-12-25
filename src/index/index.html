@@ -1,15 +1,20 @@
 <!doctype html>
 <script type="text/javascript" src="../../js/jq.js"></script>
 <script type="text/javascript" src="../../js/bs.js"></script>
+<script type="text/javascript" src="../../js/fs.js"></script>
+
+<script type="text/javascript" src="../../js/ok.js"></script>
+<script type="text/javascript" src="../../js/jquery-linedtextarea.js"></script>
 <script type="text/javascript" src="../../js/main.js"></script>
-<script type="text/javascript" src="../../js/miu.js"></script>
-<title>jsPlayground</title>
-<link href="../../js/bs.css" rel="stylesheet">
+
+<title>App Builder</title>
+<link href="../../css/bs.css" rel="stylesheet">
+<link href="../../js/lta.css" rel="stylesheet">
 <link href='http://fonts.googleapis.com/css?family=Exo:400,600italic' rel='stylesheet' type='text/css'>
 <style type="text/css">
 	#mainPopup {
 		padding: 10px;
-		height: 600px;
+		height: 100%;
 		width: 100%;
 		
 		font-family: 'Exo', sans-serif;
@@ -17,6 +22,13 @@
 	
 	h1 {
 		font-size: 2em;
+	}
+
+	textarea {
+		background-color: #f2f2f2;
+		padding: 15px;
+		font-size: 14px;
+		border-radius: 7px;
 	}
 
 </style>
@@ -33,32 +45,35 @@
     <li role="presentation"><a href="#html" aria-controls="profile" role="tab" data-toggle="tab">HTML</a></li>
     <li role="presentation"><a href="#css" aria-controls="messages" role="tab" data-toggle="tab">CSS</a></li>
     
-    <li><label style="margin-left:200px" for="libcss">css: </label><input = placeholder="Enter path to css file" type="text" class="form_control" id="libcss" /></li>
-    <li><label style="margin-left:20px" for="libjs">js: </label><input type="text" placeholder="Enter path to js file" class="form_control" id="libjs" /></li>
-    <li><button class="btn btn-run" style="margin-left:25px" id="go">RUN</button></li>
-    <li><button class="btn btn-success" id="saver" style="margin-left:25px">SAVE</button></li>
+    <li style="margin-top:7px!important"><label style="margin-left:75px" for="libcss">css: </label><input = placeholder="Enter path to css file" type="text" class="form_control" id="libcss" /></li>
+    <li style="margin-top:7px"><label style="margin-left:20px" for="libjs">js: </label><input type="text" placeholder="Enter path to js file" class="form_control" id="libjs" /></li>
+    <li><button class="btn btn-info" style="margin-left:25px" id="go"><span class="glyphicon glyphicon-play"></span></button></li>
+    <li><button class="btn btn-success" id="saver" style="margin-left:15px"><span class="glyphicon glyphicon-floppy-save"></span></button></li>
+    <li><button class="btn btn-warning" id="clear" style="margin-left:15px"><span class="glyphicon glyphicon-refresh"></span></button></li>
+    <li><button class="btn btn-danger" id="deleter" style="margin-left:15px"><span class="glyphicon glyphicon-remove"></span></a></li>
+    <li><button class="btn btn-default" id="export" style="margin-left:15px"><span class="glyphicon glyphicon-download"></span></button></li>
 
   </ul>
 
   <!-- Tab panes -->
-  <div class="tab-content">
+  <div class="tab-content" style="margin-top:20px">
   	
-    <div role="tabpanel" class="tab-pane active" id="js"><textarea id="jsBody" class="code_box" style="font-size: 1.5em; width: 100%; height: 300px; border: none; outline: none;margin-top:25px" autofocus> </textarea></div>
-    <div role="tabpanel" class="tab-pane" id="html"><textarea  class="code_box"id="htmlBody" style="font-size: 1.5em; width: 100%; height: 300px; border: none; outline: none;margin-top:25px" autofocus> </textarea></div>
-    <div role="tabpanel" class="tab-pane" id="css"><textarea  class="code_box" id="cssBody" style="font-size: 1.5em; width: 100%; height: 300px; border: none; outline: none;margin-top:25px" autofocus> </textarea></div>
+    <div role="tabpanel" class="tab-pane active" id="js"><textarea id="jsBody" class="code_box lined" spellcheck="false" style="width: 900px; height: 300px; border: none; outline: none;" autofocus> </textarea></div>
+    <div role="tabpanel" class="tab-pane" id="html"><textarea  class="code_box lined" id="htmlBody" style="width: 900px; height: 300px; border: none; outline: none"  spellcheck="false"  autofocus> </textarea></div>
+    <div role="tabpanel" class="tab-pane" id="css"><textarea  class="code_box lined" id="cssBody"  spellcheck="false" style="width: 900px; height: 300px; border: none; outline: none" autofocus> </textarea></div>
  
   </div>
 
 </div>
 </div>
-<div class="col-md-2">
-	<legend>Projects:</legend>
-	<a class="btn btn-block btn-warning" id="deleter">DELETE</a>
+<div class="col-md-2" style="padding-right:25px!important">
+	<!-- <legend>Projects:</legend> -->
+	<p>Current Project: <button class="btn btn-xs btn-default" id="exportToGitHub" style=""><span class="glyphicon glyphicon-download"></span></button><br><strong><span id="current">...</span></strong></p>
 	<div id="consoleLog"></div>
 </div>
 
 </div>
-<legend>Output:</legend>
+<legend>Output: <button class="btn btn-default" id="desktop" style="margin-left:25px">Desktop</button><button class="btn btn-default" id="tablet" style="margin-left:25px">Tablet</button><button class="btn btn-default" id="mobile" style="margin-left:25px">Mobile</button> <div id="msgBox" class="alert alert-success" role="alert"></div></legend>
 
 	<section id="output">
 
@@ -93,9 +108,20 @@
 #output {
 	
 	border: 2px solid #444;
-	overflow: hidden;
+	overflow: scroll;
+
 }
 
+.righter {
+	margin-right:20px;
+}
+
+#consoleLog {
+	height: 325px;
+	width: 200px;
+	overflow-y: scroll;
+overflow-x: hidden;
+}
 #output iframe {
 	width: 100%; height: 400px;
 	border: 0;
