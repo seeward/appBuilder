@@ -198,7 +198,7 @@ $(document).ready(function() {
         $.each(keys, function(i, obj) {
             //console.log(JSON.stringify(obj));
             if (obj != "cache") {
-                $("#consoleLog").append("<a style='margin-top:7px;margin-right:25px' class='noteRow btn btn-block btn-default righter' id='" + obj + "'>" + obj + "</a>");
+                $("#consoleLog").append("<a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-default righter' id='" + obj + "'>" + obj + "</a>");
 
             }
 
