@@ -68,17 +68,11 @@ $(document).ready(function() {
         });
 
 
-        var blob = new Blob([holder], {
-            type: "text/plain;charset=utf-8"
-        });
-
+        
         tempFile = JSON.stringify(holder);
-        namer = "exportFromAppBuilder.txt";
-        if (namer != null) {
-            saveAs(blob, namer);
-        }
+        
 
-        createGist("fullLocalBackup.json", tempFile);
+        createGist("fullProjectsBackup.json", tempFile);
 
     };
 
@@ -322,6 +316,7 @@ $(document).ready(function() {
 
     (function init() {
         //window.localStorage.clear();
+        //window.localStorage.removeItem("test");
         $("#msgBox").hide();
         initLog = "\n<------------- init successful ------------->";
         console.log(initLog);
