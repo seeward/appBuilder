@@ -13,7 +13,7 @@ $(document).ready(function() {
 
     var gh = new Octokit({
         username: "seeward",
-        password: ""
+        password: "Artworker#1"
     });
 
     var tempFile = "";
