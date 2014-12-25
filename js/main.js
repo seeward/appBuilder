@@ -1,4 +1,10 @@
 $(document).ready(function() {
+
+        $("#consoleLog").searcher({
+        inputSelector: "#searchTerm"
+        // itemSelector (tbody > tr) and textSelector (td) already have proper default values
+    });
+
     $(".lined").linedtextarea();
     // Gather textareas
     var html_editor = $("#htmlBody"),
@@ -192,7 +198,7 @@ $(document).ready(function() {
         $.each(keys, function(i, obj) {
             //console.log(JSON.stringify(obj));
             if (obj != "cache") {
-                $("#consoleLog").append("<a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-default righter' id='" + obj + "'>" + obj + "</a>");
+                $("#consoleLog").append("<tr><td><a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-default righter' id='" + obj + "'>" + obj + "</a></td></tr>");
 
             }
 
