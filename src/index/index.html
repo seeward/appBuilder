@@ -37,20 +37,32 @@
     <noscript>
     <li style="margin-top:7px!important"><label style="margin-left:200px" for="libcss">css: </label><input = placeholder="Enter path to css file" type="text" class="form_control" id="libcss" /></li>
     <li style="margin-top:7px"><label style="margin-left:20px" for="libjs">js: </label><input type="text" placeholder="Enter path to js file" class="form_control" id="libjs" /></li></noscript>
-    <li><button class="btn btn-info" style="margin-left:460px" id="go"><span class="glyphicon glyphicon-play"></span></button></li>
+    <li><button class="btn btn-info" style="margin-left:435px" id="go"><span class="glyphicon glyphicon-play"></span></button></li>
     <li><button class="btn btn-success" id="saver" style="margin-left:15px"><span class="glyphicon glyphicon-floppy-save"></span></button></li>
     <li><button class="btn btn-warning" id="clear" style="margin-left:15px"><span class="glyphicon glyphicon-refresh"></span></button></li>
     <li><button class="btn btn-danger" id="deleter" style="margin-left:15px"><span class="glyphicon glyphicon-remove"></span></a></li>
-    <li><button class="btn btn-default" id="export" style="margin-left:15px"><span class="glyphicon glyphicon-download"></span></button></li>
+    <li><button class="btn btn-custom" id="export" style="margin-left:15px"><span class="glyphicon glyphicon-download"></span></button></li>
+    
 
+	<li><!-- Single button -->
+<div class="btn-group">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="margin-left:15px" >
+    <span class="glyphicon glyphicon-plus"> </span><span class="caret" style="margin-left:3px"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+    <li><a href="#" id="inserter">Polymer Element</a></li>
+    <li><a href="#">JSP Page</a></li>
+    <li><a href="#" id="mobiInsert">Mobile App</a></li>
+  </ul>
+</div></li>
   </ul>
 
   <!-- Tab panes -->
   <div class="tab-content" style="margin-top:20px">
   	
-    <div role="tabpanel" class="tab-pane active" id="js"><textarea id="jsBody" class="code_box lined" spellcheck="false" style="width: 900px; height: 365px; border: none; outline: none;" autofocus> </textarea></div>
-    <div role="tabpanel" class="tab-pane" id="html"><textarea  class="code_box lined" id="htmlBody" style="width: 900px; height: 365px; border: none; outline: none"  spellcheck="false"  autofocus> </textarea></div>
-    <div role="tabpanel" class="tab-pane" id="css"><textarea  class="code_box lined" id="cssBody"  spellcheck="false" style="width: 900px; height: 365px; border: none; outline: none" autofocus> </textarea></div>
+    <div role="tabpanel" class="tab-pane active" id="js"><textarea id="jsBody" class="code_box lined" spellcheck="false" style="width: 910px; height: 365px; border: none; outline: none;" autofocus> </textarea></div>
+    <div role="tabpanel" class="tab-pane" id="html"><textarea  class="code_box lined" id="htmlBody" style="width: 910px; height: 365px; border: none; outline: none"  spellcheck="false"  autofocus> </textarea></div>
+    <div role="tabpanel" class="tab-pane" id="css"><textarea  class="code_box lined" id="cssBody"  spellcheck="false" style="width: 910px; height: 365px; border: none; outline: none" autofocus> </textarea></div>
  
   </div>
 
@@ -127,6 +139,34 @@ overflow-x: hidden;
 	width: 100%; height: 400px;
 	border: 0;
 }
+
+.btn-custom {
+  background-color: #6ad1e8;
+  border-color: #6ad1e8;
+}
+.btn-custom:hover,
+.btn-custom:focus,
+.btn-custom:active,
+.btn-custom.active {
+  background-color: #54cae5;
+  border-color: #3ec3e1;
+}
+.btn-custom.disabled:hover,
+.btn-custom.disabled:focus,
+.btn-custom.disabled:active,
+.btn-custom.disabled.active,
+.btn-custom[disabled]:hover,
+.btn-custom[disabled]:focus,
+.btn-custom[disabled]:active,
+.btn-custom[disabled].active,
+fieldset[disabled] .btn-custom:hover,
+fieldset[disabled] .btn-custom:focus,
+fieldset[disabled] .btn-custom:active,
+fieldset[disabled] .btn-custom.active {
+  background-color: #6ad1e8;
+  border-color: #6ad1e8;
+}
+
 
 </style>
 <style type="text/css">
