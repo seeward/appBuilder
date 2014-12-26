@@ -1,4 +1,4 @@
-jsPlayground
+App Builder
 ============
 
-simple html, js and css playground
+browser based app / element creation tool
