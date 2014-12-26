@@ -131,7 +131,7 @@ $(document).ready(function() {
     });
 
     $("#tablet").click(function() {
-        $("#output").css("width", "720px");
+        $("#output").css("width", "1024px");
         render();
     });
 
@@ -322,7 +322,7 @@ $(document).ready(function() {
 
     (function init() {
         //window.localStorage.clear();
-        //window.localStorage.removeItem("test");
+        window.localStorage.removeItem("Parse/COrDTZjsSjOUkiIDHUXiEVdgWfqlURUbm3wKPGJW/installationId");
         $("#msgBox").hide();
         initLog = "\n<------------- init successful ------------->";
         console.log(initLog);
