@@ -1,15 +1,5 @@
 $(document).ready(function() {
 
-    var options = {
-        debug: true,
-        GitHub: true,
-        kalmerMode: true
-
-
-
-    };
-
-    var loader = "<img src='loader.gif' />";
     var gh = {};
     var currentUser = {};
     var jsTest = "";
@@ -48,13 +38,13 @@ $(document).ready(function() {
     jsTest += "\/* DEBUG *\/ window.console.log('js\/index.js loaded...');";
     jsTest += "";
 
-    $("#logout").click(function(e) {
+    $("#logout").click(function(e){
         e.preventDefault();
         window.localStorage.removeItem("u");
         $("#msgBox").show().html("User Logged Out!");
-        setTimeout(function() {
+        setTimeout(function(){
             $("#msgBox").hide();
-        }, 3000);
+        },3000);
     });
 
     var mobileHTML = "";
@@ -92,7 +82,7 @@ $(document).ready(function() {
         // itemSelector (tbody > tr) and textSelector (td) already have proper default values
     });
 
-
+    $(".lined").linedtextarea();
     // Gather textareas
     var html_editor = $("#htmlBody"),
         css_editor = $("#cssBody"),
@@ -112,14 +102,13 @@ $(document).ready(function() {
     var newHold = "";
 
     var createGist = function(fileName, dataToWrite) {
+        console.log(currentUser.user);
         var file = {};
         var key = fileName;
 
         file[key] = {
             content: dataToWrite
         };
-
-        $("#msgBox").fadeIn().html(loader + " Writing file to GitHub...");
 
         console.log("Writing file to GitHub...");
 
@@ -132,10 +121,10 @@ $(document).ready(function() {
         gh.getGist().create(file)
             .done(function(gist) {
                 //console.log(JSON.stringify(gist));
-                $("#msgBox").html("<span class='glyphicon glyphicon-ok'></span> GIST saved successfully");
+                $("#msgBox").html("GIST saved successfully");
                 $("#msgBox").show();
                 setTimeout(function() {
-                    $("#msgBox").fadeOut();
+                    $("#msgBox").hide();
                 }, 2000);
             });
 
@@ -168,8 +157,7 @@ $(document).ready(function() {
 
     };
 
-    $("#exportToGitHub").click(function(e) {
-        e.preventDefault();
+    $("#exportToGitHub").click(function() {
         exportToGitHub();
     });
 
@@ -193,8 +181,7 @@ $(document).ready(function() {
 
     };
 
-    $("#export").click(function(e) {
-        e.preventDefault();
+    $("#export").click(function() {
         toFile = prepareSource();
         window.location = "data:application/octet-stream," + escape(toFile);
         createGist(currentNote, toFile);
@@ -279,43 +266,24 @@ $(document).ready(function() {
         $("#jsBody").val("");
         $("#cssBody").val("");
         $("#htmlBody").val("");
-        currentNote = "Empty Project";
-        $(".current").html(currentNote);
+        currentNote = "";
+        $("#current").html(currentNote);
         render();
     });
-
-    var makeId = function(){
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    for( var i=0; i < 5; i++ )
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-console.log(text);
-    return text;
-    }
 
     //save cache to project
     var saveProject = function() {
         render();
         if (!window.localStorage.getItem(currentNote)) {
-            us = JSON.parse(window.localStorage.getItem("u"));
             saver = JSON.parse(window.localStorage.getItem("cache"));
             saver.title = prompt("Name project:");
-            saver.author = us.user;
-            saver.createdDate = new Date();
-            saver.id = makeId();
-            console.log(saver.id);
-            saver.type = "Web App";
-
             currentNote = saver.title;
-            $(".current").html(currentNote);
+            $("#current").html(currentNote);
             if (saver.title != null) {
                 window.localStorage.setItem(saver.title, JSON.stringify(saver));
             }
         } else {
-            saver = JSON.parse(window.localStorage.getItem(currentNote));
-             //saver.id = makeId();
-             //console.log(saver.id);
+            saver = JSON.parse(window.localStorage.getItem("cache"));
             window.localStorage.setItem(currentNote, JSON.stringify(saver));
         }
 
@@ -323,48 +291,17 @@ console.log(text);
         getSaved();
     };
 
-    var togState = false;
-
-    $('#shower').click(function() {
-
-        if (togState == true) {
-            $(".expandTray").fadeOut();
-            togState = false;
-            return
-        } else {
-            $(".expandTray").fadeIn();
-            togState = true;
-            return
-        }
-
-
-    });
-
-    
-
-
-
-
     var getSaved = function() {
-        var x = 0;
+
         $("#consoleLog").html("");
         keys = Object.keys(localStorage);
         //console.log(keys);
-        var rows = keys.length;
         $.each(keys, function(i, obj) {
-            if (x <= 100) {
-                x = x + 10;
-            }
-
-
+            console.log(JSON.stringify(obj));
             if (obj != "u") {
-                if (obj != "cache") {
-                    // console.log(obj);
+                $("#consoleLog").append("<tr><td><a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-default righter' id='" + obj + "'>" + obj + "</a></td></tr>");
 
-                    $("#consoleLog").append("<tr><td><a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-default righter' id='" + obj + "'>" + obj + "</a></td></tr>");
-                }
             }
-
 
 
         });
@@ -436,7 +373,7 @@ console.log(text);
 
     $("#consoleLog").on("click", "a", function(e) {
         note = $(this).text();
-        $("#currentInfo").html("");
+
         newNote = JSON.parse(window.localStorage.getItem(note));
 
         js = newNote.js;
@@ -444,10 +381,7 @@ console.log(text);
         html = newNote.html;
 
         currentNote = note;
-        $(".current").html(currentNote);
-        $("#currentInfo").append("<tr><td>Type: </td><td>" + newNote.type + "</td></tr>");
-        $("#currentInfo").append("<tr><td>Author: </td><td>" + newNote.author + "</td></tr>");
-        $("#currentInfo").append("<tr><td>Date</td><td>" + newNote.createdDate.substring(0, 10) + "</td></tr>");
+        $("#current").html("<strong>Proj: </strong>"+currentNote);
         $("#jsBody").val(js);
         $("#cssBody").val(css);
         $("#htmlBody").val(html);
@@ -464,7 +398,7 @@ console.log(text);
             window.localStorage.removeItem(currentNote);
         }
         currentNote = "...";
-        $(".current").html(currentNote);
+        $("#current").html("<strong>Proj: </strong>"+currentNote);
         getSaved();
     });
 
@@ -486,10 +420,10 @@ console.log(text);
         }
     });
 
-    $('.modal-footer button').click(function() {
+ $('.modal-footer button').click(function(){
         var button = $(this);
 
-        if (button.attr("data-dismiss") != "modal") {
+        if ( button.attr("data-dismiss") != "modal" ){
             var inputs = $('form input');
             var title = $('.modal-title');
             var progress = $('.progress');
@@ -501,35 +435,31 @@ console.log(text);
             userObj.user = user;
             userObj.pass = pass;
 
-
-            window.localStorage.setItem("u", JSON.stringify(userObj));
-            currentUser = user;
+            window.localStorage.setItem("u",JSON.stringify(userObj));
             inputs.attr("disabled", "disabled");
 
             button.hide();
 
             progress.show();
 
-            progressBar.animate({
-                width: "100%"
-            }, 100);
+            progressBar.animate({width : "100%"}, 100);
 
             progress.delay(1000)
-                .fadeOut(600);
+                    .fadeOut(600);
 
             button.text("Close")
-                .removeClass("btn-primary")
-                .addClass("btn-success")
-                .blur()
-                .delay(1600)
-                .fadeIn(function() {
-                    title.text("Log in is successful");
-                    button.attr("data-dismiss", "modal");
-                });
+                    .removeClass("btn-primary")
+                    .addClass("btn-success")
+                    .blur()
+                    .delay(1600)
+                    .fadeIn(function(){
+                        title.text("Log in is successful");
+                        button.attr("data-dismiss", "modal");
+                    });
         }
     });
 
-    $('#myModal').on('hidden.bs.modal', function(e) {
+    $('#myModal').on('hidden.bs.modal', function (e) {
         e.preventDefault();
         var inputs = $('form input');
         var title = $('.modal-title');
@@ -540,151 +470,36 @@ console.log(text);
 
         title.text("Log in");
 
-        progressBar.css({
-            "width": "0%"
-        });
+        progressBar.css({ "width" : "0%" });
 
         button.removeClass("btn-success")
-            .addClass("btn-primary")
-            .text("Ok")
-            .removeAttr("data-dismiss");
-
+                .addClass("btn-primary")
+                .text("Ok")
+                .removeAttr("data-dismiss");
+                
     });
 
-    var importer = function() {
-        $.getJSON("backup.json", function(data) {
-            $.each(data, function(i, o) {
-
-                window.localStorage.setItem(o.name, JSON.stringify(o));
-            });
-
-        });
-    };
-
-    var addType = function() {
-
-        keys = Object.keys(localStorage);
-        //console.log(keys);
-        $.each(keys, function(i, obj) {
-
-            fullObj = JSON.parse(window.localStorage.getItem(obj));
-            fullObj.type = "Web App";
-            fullObj.name = obj.toString();
-
-            cu = window.localStorage.getItem("u");
-            cu = JSON.parse(cu);
-            fullObj.author = cu.user;
-            fullObj.createdDate = new Date();
-            window.localStorage.setItem(obj.toString(), JSON.stringify(fullObj));
-
-
-
-        });
-
-    };
-
-    $("#fullScreen").click(function(){
-        $("#output").css("z-index","10");
-        $("#output").css("position","absolute");
-        $("#output").css("top","0px");
-        $("#output").css("left","0px");
-
-        $("#output").css("width","100%");
-        $("#output").css("height","100%!important");
-        
-
-    });
-
-    $("#kalmeer").click(function(e){
-        e.preventDefault();
-
-        if (kalmeerMode == true) {
-            $("#jsBody").css("background-color", "black");
-            $("#jsBody").css("color", "white");
-            $("#htmlBody").css("background-color", "black");
-            $("#htmlBody").css("color", "white");
-            $("#cssBody").css("background-color", "black");
-            $("#cssBody").css("color", "white");
-            $("body").css("background-color", "black");
-            $("#output").css("background-color", "white");
-            kalmeerMode = false;
-        } else {
-            $("#htmlBody").css("background-color", "white");
-            $("#htmlBody").css("color", "black");
-            $("#cssBody").css("background-color", "white");
-            $("#cssBody").css("color", "black");
-            $("#jsBody").css("background-color", "white");
-            $("#jsBody").css("color", "black");
-            $("body").css("background-color", "white");
-            kalmeerMode = true;
-        }
-
-    });
-
-    function init(options) {
-
-        kalmeerMode = true;
-
-        if (options.debug == true) {
-            console.log("DEBUG MODE");
-        }
-        //addType();
+    (function init() {
         //window.localStorage.clear();
         //window.localStorage.removeItem("Parse/COrDTZjsSjOUkiIDHUXiEVdgWfqlURUbm3wKPGJW/installationId");
         $("#msgBox").hide();
-        //importer();
-        if (window.localStorage.getItem("u")) {
-            currentUserCache = JSON.parse(window.localStorage.getItem("u"));
-            currentUser = currentUserCache.user;
 
-            gh = new Octokit({
-                username: currentUserCache.user,
-                password: currentUserCache.pass
-            });
+        if(window.localStorage.getItem("u")){
+            currentUserCache = JSON.parse(window.localStorage.getItem("u"));
+            currentUser.user = currentUserCache.user;
+            currentUser.pass = currentUserCache.pass;
+            console.log(JSON.stringify(currentUser));
+                gh = new Octokit({
+        username: currentUser.user,
+        password: currentUser.pass
+    });
         }
         initLog = "\n<------------- init successful ------------->";
-        //restoreFromCache();
+        console.log(initLog);
+        restoreFromCache();
         getSaved();
 
-        var editorJS = new Behave({
+    })();
 
-            textarea: document.getElementById('jsBody'),
-            replaceTab: true,
-            softTabs: true,
-            tabSize: 4,
-            autoOpen: true,
-            overwrite: true,
-            autoStrip: true,
-            autoIndent: true
-        });
-
-        var editorCSS = new Behave({
-
-            textarea: document.getElementById('cssBody'),
-            replaceTab: true,
-            softTabs: true,
-            tabSize: 4,
-            autoOpen: true,
-            overwrite: true,
-            autoStrip: true,
-            autoIndent: true
-        });
-        var editorHTML = new Behave({
-
-            textarea: document.getElementById('htmlBody'),
-            replaceTab: true,
-            softTabs: true,
-            tabSize: 4,
-            autoOpen: true,
-            overwrite: true,
-            autoStrip: true,
-            autoIndent: true
-        });
-
-
-    };
-
-    init(options);
-
-
+    
 });
