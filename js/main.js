@@ -9,6 +9,29 @@ $(document).ready(function() {
 
     };
 
+
+
+    var jseditor = ace.edit("jsEditor");
+    jseditor.setOption("showPrintMargin", false);
+    jseditor.setOption("fontSize", "24px");
+    jseditor.setTheme("ace/theme/monokai");
+    jseditor.$blockScrolling = Infinity;
+    jseditor.getSession().setMode("ace/mode/javascript");
+
+    var htmleditor = ace.edit("htmlEditor");
+    htmleditor.setOption("showPrintMargin", false);
+    htmleditor.setOption("fontSize", "24px");
+    htmleditor.setTheme("ace/theme/chrome");
+    htmleditor.$blockScrolling = Infinity;
+    htmleditor.getSession().setMode("ace/mode/html");
+
+    var csseditor = ace.edit("cssEditor");
+    csseditor.setOption("showPrintMargin", false);
+    csseditor.$blockScrolling = Infinity;
+    csseditor.setOption("fontSize", "24px");
+    csseditor.setTheme("ace/theme/eclipse");
+    csseditor.getSession().setMode("ace/mode/css");
+
     var loader = "<img src='loader.gif' />";
     var gh = {};
     var currentUser = {};
@@ -80,8 +103,9 @@ $(document).ready(function() {
 
     $("#mobiInsert").click(function(e) {
         e.preventDefault();
-        $("#htmlBody").val(mobileHTML);
-        $("#jsBody").val(jsTest);
+        htmleditor.setValue(mobileHTML);
+        jseditor.setValue(jsTest);
+        
 
     });
 
@@ -178,9 +202,9 @@ $(document).ready(function() {
     // func to store cache of unsaved projects
     var cacheLog = function() {
         cache = {};
-        jsCache = js_editor.val();
-        htmlCache = html_editor.val();
-        cssCache = css_editor.val();
+        jsCache = jseditor.getValue();
+        htmlCache = htmleditor.getValue();
+        cssCache = csseditor.getValue();
         extJS = $("#libjs").val();
         extCSS = $("#libcss").val();
         cache.html = htmlCache;
@@ -195,19 +219,31 @@ $(document).ready(function() {
 
     $("#export").click(function(e) {
         e.preventDefault();
-        toFile = prepareSource();
-        window.location = "data:application/octet-stream," + escape(toFile);
-        createGist(currentNote, toFile);
-        //console.log(currentNote);
+
+        if (jseditor.getValue() != "" && csseditor.getValue() != "" && htmleditor.getValue() != "") {
+
+            toFile = prepareSource();
+            window.location = "data:application/octet-stream," + escape(toFile);
+            createGist(currentNote, toFile);
+            //console.log(currentNote);
+
+        } else {
+            $("#msgBox").html("<span class='glyphicon glyphicon-ban-circle fonter'>You cannot export an empty project.</span>").fadeIn();
+
+            setTimeout(function() {
+                $("#msgBox").fadeOut();
+            }, 3000);
+        }
     });
 
 
     function restoreFromCache() {
         if (window.localStorage.getItem("cache")) {
             restoreCache = JSON.parse(window.localStorage.getItem("cache"));
-            html_editor.val(restoreCache.html);
-            js_editor.val(restoreCache.js);
-            css_editor.val(restoreCache.css);
+            htmleditor.setValue(restoreCache.html);
+            jseditor.setValue(restoreCache.js);
+            csseditor.setValue(restoreCache.css);
+            
             $("#libjs").val(restoreCache.extJS);
             $("#libcss").val(restoreCache.extCSS);
         }
@@ -237,7 +273,8 @@ $(document).ready(function() {
         "<script type='text/javascript' src='../../js/jq.js'></script>\n\t\t" +
         "<script type='text/javascript' src='../../js/bs.js'></script>\n\t\t" +
         "<script type='text/javascript' src='../../js/ch.js'></script>\n\t\t" +
-
+        "<script type='text/javascript' src='../../js/POLYROOT/bower_components/webcomponentsjs/webcomponents.js'></script>\n\t\t" +
+        "<link rel='import' href='../../js/POLYROOT/bower_components/polymer/polymer.html'" +
         "<link href='http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css' rel='stylesheet' />" +
         "<link href='../../js/bs.css' rel='stylesheet' />\n\t\t" +
         "<title>" + currentNote + "</title>\n\n\t\t\n\t" +
@@ -268,30 +305,36 @@ $(document).ready(function() {
 
     $("#inserter").click(function(e) {
         e.preventDefault();
-        $("#htmlBody").val(polyTemp);
+         jseditor.setValue("");
+        csseditor.setValue("");
+        htmleditor.setValue(polyTemp);
+        
     });
+
+   
 
 
 
     // clear all 
 
     $("#clear").click(function() {
-        $("#jsBody").val("");
-        $("#cssBody").val("");
-        $("#htmlBody").val("");
+        jseditor.setValue("");
+        csseditor.setValue("");
+        htmleditor.setValue("");
+        
         currentNote = "Empty Project";
         $(".current").html(currentNote);
         render();
     });
 
-    var makeId = function(){
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var makeId = function() {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    for( var i=0; i < 5; i++ )
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-console.log(text);
-    return text;
+        for (var i = 0; i < 5; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        console.log(text);
+        return text;
     }
 
     //save cache to project
@@ -313,9 +356,9 @@ console.log(text);
                 window.localStorage.setItem(saver.title, JSON.stringify(saver));
             }
         } else {
-            saver = JSON.parse(window.localStorage.getItem(currentNote));
-             //saver.id = makeId();
-             //console.log(saver.id);
+            saver = JSON.parse(window.localStorage.getItem("cache"));
+            //saver.id = makeId();
+            //console.log(saver.id);
             window.localStorage.setItem(currentNote, JSON.stringify(saver));
         }
 
@@ -340,7 +383,7 @@ console.log(text);
 
     });
 
-    
+
 
 
 
@@ -362,8 +405,13 @@ console.log(text);
                     // console.log(obj);
 
                     $("#consoleLog").append("<tr><td><a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-default righter' id='" + obj + "'>" + obj + "</a></td></tr>");
+               
+                    
+                        };
+
                 }
-            }
+           
+
 
 
 
@@ -395,9 +443,9 @@ console.log(text);
 
     var prepareSource = function() {
         // Gather textarea values
-        var html = html_editor.val(),
-            css = css_editor.val(),
-            js = js_editor.val(),
+        var html = htmleditor.getValue(),
+            css = csseditor.getValue(),
+            js = jseditor.getValue(),
             //lib = $("#libcss").val();
             // libjs = $("#libjs").val();
             src = '';
@@ -447,18 +495,20 @@ console.log(text);
         $(".current").html(currentNote);
         $("#currentInfo").append("<tr><td>Type: </td><td>" + newNote.type + "</td></tr>");
         $("#currentInfo").append("<tr><td>Author: </td><td>" + newNote.author + "</td></tr>");
-        $("#currentInfo").append("<tr><td>Date</td><td>" + newNote.createdDate.substring(0, 10) + "</td></tr>");
-        $("#jsBody").val(js);
-        $("#cssBody").val(css);
-        $("#htmlBody").val(html);
+       // $("#currentInfo").append("<tr><td>Date</td><td>" + newNote.createdDate.substring(0, 10) + "</td></tr>");
+        jseditor.setValue(js);
+        csseditor.setValue(css);
+        htmleditor.setValue(html);
+        
         render();
 
     });
 
     $("#deleter").click(function() {
-        $("#jsBody").val("");
-        $("#cssBody").val("");
-        $("#htmlBody").val("");
+        jseditor.setValue("");
+        csseditor.setValue("");
+        htmleditor.setValue("");
+        
 
         if (currentNote != "cache") {
             window.localStorage.removeItem(currentNote);
@@ -469,22 +519,7 @@ console.log(text);
     });
 
 
-    $(document).delegate('.code_box', 'keydown', function(e) {
-        var keyCode = e.keyCode || e.which;
 
-        if (keyCode == 9) {
-            e.preventDefault();
-            var start = $(this).get(0).selectionStart;
-            var end = $(this).get(0).selectionEnd;
-
-            // set textarea value to: text before caret + tab + text after caret
-            $(this).val($(this).val().substring(0, start) + "\t" + $(this).val().substring(end));
-
-            // put caret at right position again
-            $(this).get(0).selectionStart =
-                $(this).get(0).selectionEnd = start + 1;
-        }
-    });
 
     $('.modal-footer button').click(function() {
         var button = $(this);
@@ -583,19 +618,12 @@ console.log(text);
 
     };
 
-    $("#fullScreen").click(function(){
-        $("#output").css("z-index","10");
-        $("#output").css("position","absolute");
-        $("#output").css("top","0px");
-        $("#output").css("left","0px");
+    $("#fullScreen").click(function() {
 
-        $("#output").css("width","100%");
-        $("#output").css("height","100%!important");
-        
 
     });
 
-    $("#kalmeer").click(function(e){
+    $("#kalmeer").click(function(e) {
         e.preventDefault();
 
         if (kalmeerMode == true) {
@@ -643,43 +671,12 @@ console.log(text);
             });
         }
         initLog = "\n<------------- init successful ------------->";
-        //restoreFromCache();
+        restoreFromCache();
         getSaved();
 
-        var editorJS = new Behave({
 
-            textarea: document.getElementById('jsBody'),
-            replaceTab: true,
-            softTabs: true,
-            tabSize: 4,
-            autoOpen: true,
-            overwrite: true,
-            autoStrip: true,
-            autoIndent: true
-        });
 
-        var editorCSS = new Behave({
 
-            textarea: document.getElementById('cssBody'),
-            replaceTab: true,
-            softTabs: true,
-            tabSize: 4,
-            autoOpen: true,
-            overwrite: true,
-            autoStrip: true,
-            autoIndent: true
-        });
-        var editorHTML = new Behave({
-
-            textarea: document.getElementById('htmlBody'),
-            replaceTab: true,
-            softTabs: true,
-            tabSize: 4,
-            autoOpen: true,
-            overwrite: true,
-            autoStrip: true,
-            autoIndent: true
-        });
 
 
     };
