@@ -274,7 +274,7 @@ $(document).ready(function() {
         "<script type='text/javascript' src='../../js/bs.js'></script>\n\t\t" +
         "<script type='text/javascript' src='../../js/ch.js'></script>\n\t\t" +
         "<script type='text/javascript' src='../../js/POLYROOT/bower_components/webcomponentsjs/webcomponents.js'></script>\n\t\t" +
-        "<link rel='import' href='../../js/POLYROOT/bower_components/polymer/polymer.html'" +
+        "<link rel='import' href='../../js/POLYROOT/bower_components/polymer/polymer.html' />" +
         "<link href='http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css' rel='stylesheet' />" +
         "<link href='../../js/bs.css' rel='stylesheet' />\n\t\t" +
         "<title>" + currentNote + "</title>\n\n\t\t\n\t" +
@@ -286,7 +286,8 @@ $(document).ready(function() {
 
     var polyTemp =
         "<link rel='import' href='../../js/POLYROOT/bower_components/polymer/polymer.html'>\n\n" +
-        "<<script type='text/javascript' src='../../js/POLYROOT/bower_components/webcomponentsjs/webcomponents.js'></script>" +
+        "<script type='text/javascript' src='../../js/POLYROOT/bower_components/webcomponentsjs/webcomponents.js'>\n\n\n"+
+        "</script>\n\n\n" +
         "<polymer-element name='' attributes=''>\n\n" +
         "<template>\n" +
         "<style>\n" +
@@ -418,6 +419,24 @@ $(document).ready(function() {
         });
 
     };
+
+var renderFull = function(){
+    $("#full").show();
+
+ var source2 = prepareSource();
+        //console.log(source);
+        // Get reference to output iFrame
+        var iframe2 = document.querySelector('#fullest'),
+            // Setup iFrame structure
+            iframe_doc2 = iframe2.contentDocument;
+        // Write to iFrame
+        console.log("<---------- Rendering Output Successful ----------->");
+        iframe_doc2.open();
+        iframe_doc2.write(source2);
+        iframe_doc2.close();
+
+};
+
 
     // Main render into iFrame
     var render = function() {
@@ -620,6 +639,7 @@ $(document).ready(function() {
 
     $("#fullScreen").click(function() {
 
+        renderFull();
 
     });
 
