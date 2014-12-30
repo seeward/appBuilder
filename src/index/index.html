@@ -3,11 +3,12 @@
 <head>
 
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
 <title>App Builder</title>
 
 <link href="../../css/bs.css" rel="stylesheet">
 
+<link href="../../js/bootstrap-select.css" rel="stylesheet">
 <link rel="import" href="../../js/POLYROOT/bower_components/polymer/polymer.html">
 <link href='http://fonts.googleapis.com/css?family=Exo:400,600italic' rel='stylesheet' type='text/css'>
 
@@ -104,12 +105,6 @@
 
 
 
-    <div class="expandTray" style="padding-left:25px;">
-
-       <span id="current" class="current">Empty Project</span>
-       <table id="currentInfo" class="table table-striped table-bordered table-condensed" style="margin-top:15px"></table>
-       
-</div>
 <div id="headline"></div>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
@@ -155,6 +150,48 @@
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<div class="modal fade" id="projDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        
+        <h4 class="modal-title" id="projLabel">Empty Project</h4>
+      </div>
+      <div class="modal-body">
+      	<fieldset>
+        <div class="input-group input-group-lg">
+  <input type="text" id="projName" class="form-control" placeholder="Project Name" aria-describedby="sizing-addon1">
+</div>
+
+<div class="input-group input-group-lg"  style="width:253px!important">
+<select id="projType" class="selectpicker">
+    <option value="Component">Component</option>
+    <option value="Web App">Web App</option>
+    <option value="AMX">AMX Page</option>
+    <option value="Polymer Element">Polymer Element</option>
+  </select>
+</div>
+
+
+<div class="input-group input-group-lg">
+  <input type="text" id="projAuthor" class="form-control" placeholder="Project Author">
+</div>
+<div class="input-group input-group-lg">
+  <input type="text" id="projDate" class="form-control" placeholder="Created Date">
+</div>
+
+</fieldset> 
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="saveProjDetails" onClick="saveDetails()" class="btn btn-success">Save changes</button>
+
+      </div>
+    </div>
+  </div>
+</div>
 
 <div id="mainPopup">
 	<div id="msgBox" class="alert alert-success" role="alert"></div>
@@ -164,7 +201,7 @@
 		 
 
 	<div class="col-md-1" style="margin-top:-20px!important;margin-left:-30px">
-		<button style="width:150px" id="shower" type="button" class="btn btn-default">
+		<button style="width:150px" id="shower" type="button" data-toggle="modal" data-target="#projDetails" class="btn btn-custom">
 		<span id="current2" class="current">Empty Project</span></button>
 	<input type="text" placeholder=" filter..." id="searchTerm" style="width:150px;margin-top:10px!important">
 	
@@ -203,7 +240,7 @@
 <li>
     <div class="btn-group" role="group">
     <button role="button" class="btn btn-info" style="margin-left:1150px" id="go"><span class="glyphicon glyphicon-play"></span></button>
-    <button  role="button"class="btn btn-success" id="saver"><span class="glyphicon glyphicon-floppy-save"></span></button>
+    <button  role="button"class="btn btn-success" id="saver"><span class="glyphicon glyphicon-heart-empty"></span></button>
     <button  role="button"class="btn btn-warning" id="clear"><span class="glyphicon glyphicon-refresh"></span></button>
     <button  role="button"class="btn btn-danger" id="deleter" ><span class="glyphicon glyphicon-remove"></span></a>
     <button  role="button"class="btn btn-custom" id="export" ><span class="glyphicon glyphicon-download"></span></button>
@@ -417,7 +454,8 @@ textarea {
 <script type="text/javascript" src="../../js/searcher.js"></script>
 <script  type="text/javascript" src="../../js/ace.js"></script>
 
-
+<script type="text/javascript" src="../../js/bootstrap-select.js"></script>
+<script type="text/javascript" src="../../js/vars.js"></script>
 <script type="text/javascript" src="../../js/main.js"></script>
 
 
