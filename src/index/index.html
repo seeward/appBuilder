@@ -1,13 +1,10 @@
 <!doctype html>
 <html>
 <head>
-
+<title>App Builder</title>
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 <link rel="icon" href="favicon.ico" type="image/x-icon">
-<title>App Builder</title>
-
 <link href="../../css/bs.css" rel="stylesheet">
-
 <link href="../../js/bootstrap-select.css" rel="stylesheet">
 <link rel="import" href="../../js/POLYROOT/bower_components/polymer/polymer.html">
 <link href='http://fonts.googleapis.com/css?family=Exo:400,600italic' rel='stylesheet' type='text/css'>
@@ -26,29 +23,16 @@
 
 
 #msgBox {
-	background-color: #5CB85C
+	background-color: #5CB85C;
+  font-family: 'Exo', sans-serif;
 }
 
-.expandTray {
-	font-family: 'Exo', sans-serif;
-	color:black;
-	font-size: 25px;
-	width:350px;
-    white-space: nowrap;
-    height: 500px;
-   padding-top:15px;
-    position: absolute;
-    left:15px;
-    top:25px;
-    padding:8px;
-    padding-left:5px;
-    display:none;
+#msgBox span {
+
+  font-family: 'Exo', sans-serif;
 }
 
-#currentInfo {
-	font-size: 16px;
-	color: #666666;
-}
+
 
 #full {
 	height:100%;
@@ -152,43 +136,34 @@
 
 <div class="modal fade" id="projDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
+    <div class="modal-content" style="margin-left:15px">
+      <div class="modal-header alert-info">
         
-        <h4 class="modal-title" id="projLabel">Empty Project</h4>
+        
       </div>
       <div class="modal-body">
-      	<fieldset>
+ 
         <div class="input-group input-group-lg">
   <input type="text" id="projName" class="form-control" placeholder="Project Name" aria-describedby="sizing-addon1">
 </div>
 
-<div class="input-group input-group-lg"  style="width:253px!important">
-<select id="projType" class="selectpicker">
-    <option value="Component">Component</option>
-    <option value="Web App">Web App</option>
-    <option value="AMX">AMX Page</option>
-    <option value="Polymer Element">Polymer Element</option>
-  </select>
+        <div class="input-group input-group-lg">
+  <input type="text" id="projType" class="form-control" placeholder="Project Type">
 </div>
 
 
 <div class="input-group input-group-lg">
   <input type="text" id="projAuthor" class="form-control" placeholder="Project Author">
 </div>
-<div class="input-group input-group-lg">
-  <input type="text" id="projDate" class="form-control" placeholder="Created Date">
-</div>
 
-</fieldset> 
+<br><br>
+ <button type="button"   style="width:253px!important" class="btn btn-default btn-block" data-dismiss="modal">Close</button>
+        <button   style="width:253px!important" type="button" id="saveProjDetails"  class="btn btn-success btn-block">Save changes</button>
 
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" id="saveProjDetails" onClick="saveDetails()" class="btn btn-success">Save changes</button>
 
       </div>
+
     </div>
   </div>
 </div>
@@ -201,8 +176,8 @@
 		 
 
 	<div class="col-md-1" style="margin-top:-20px!important;margin-left:-30px">
-		<button style="width:150px" id="shower" type="button" data-toggle="modal" data-target="#projDetails" class="btn btn-custom">
-		<span id="current2" class="current">Empty Project</span></button>
+		<button style="width:150px" id="shower" type="button" class="btn btn-custom" >
+		<span id="current2" style="font-size:14px;font-weight:bold" class="current">Empty Project</span></button>
 	<input type="text" placeholder=" filter..." id="searchTerm" style="width:150px;margin-top:10px!important">
 	
 	<div id="logWrap">
@@ -224,6 +199,7 @@
   	<li><a href="#" id="logout">Logout</a></li>
     <li><a href="#" id="exportToGitHub">Backup</a></li>
     <li><a href="#" id="kalmeer">Kalmeer Mode</a></li>
+    <li><a href="#" id="debug">e:debug</a></li>
     
   </ul>
 </div></li>
@@ -374,6 +350,32 @@ fieldset[disabled] .btn-custom.active {
   border-color: #6ad1e8;
 }
 
+.btn-light {
+  background-color: #c1e9ff;
+  border-color: #c1e9ff;
+}
+.btn-light:hover,
+.btn-light:focus,
+.btn-light:active,
+.btn-light.active {
+  background-color: #a8e0ff;
+  border-color: #8ed7ff;
+}
+.btn-light.disabled:hover,
+.btn-light.disabled:focus,
+.btn-light.disabled:active,
+.btn-light.disabled.active,
+.btn-light[disabled]:hover,
+.btn-light[disabled]:focus,
+.btn-light[disabled]:active,
+.btn-light[disabled].active,
+fieldset[disabled] .btn-light:hover,
+fieldset[disabled] .btn-light:focus,
+fieldset[disabled] .btn-light:active,
+fieldset[disabled] .btn-light.active {
+  background-color: #c1e9ff;
+  border-color: #c1e9ff;
+}
 
 
 </style>
@@ -413,13 +415,39 @@ fieldset[disabled] .btn-custom.active {
     background: #3276B1;
 }
 
+.btn-lighter {
+  background-color: #d3eefc;
+  border-color: #d3eefc;
+}
+.btn-lighter:hover,
+.btn-lighter:focus,
+.btn-lighter:active,
+.btn-lighter.active {
+  background-color: #bbe5fa;
+  border-color: #a3dcf9;
+}
+.btn-lighter.disabled:hover,
+.btn-lighter.disabled:focus,
+.btn-lighter.disabled:active,
+.btn-lighter.disabled.active,
+.btn-lighter[disabled]:hover,
+.btn-lighter[disabled]:focus,
+.btn-lighter[disabled]:active,
+.btn-lighter[disabled].active,
+fieldset[disabled] .btn-lighter:hover,
+fieldset[disabled] .btn-lighter:focus,
+fieldset[disabled] .btn-lighter:active,
+fieldset[disabled] .btn-lighter.active {
+  background-color: #d3eefc;
+  border-color: #d3eefc;
+}
 
 
 	#msgBox {
 		display: none;
 		position: absolute;
-		left:1200px;
-		top:18px;
+		left:900px;
+		top:-3px;
 		z-index: 10
 	}
 
@@ -445,6 +473,22 @@ textarea {
 }
 </style>
 
+<script id="polymerTemp" type="x-tmpl-mustache">
+<link rel="import" href="../polymer/polymer.html"><polymer-element name="" attributes="">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+  </template>
+  <CHANGE>
+    Polymer('', {
+      
+    });
+  </CHANGE>
+</polymer-element>
+</script>
 
 
 <script type="text/javascript" src="../../js/jq.js"></script>
@@ -454,7 +498,7 @@ textarea {
 <script type="text/javascript" src="../../js/searcher.js"></script>
 <script  type="text/javascript" src="../../js/ace.js"></script>
 
-<script type="text/javascript" src="../../js/bootstrap-select.js"></script>
+<script  type="text/javascript" src="../../js/mustache.js"></script>
 <script type="text/javascript" src="../../js/vars.js"></script>
 <script type="text/javascript" src="../../js/main.js"></script>
 

@@ -1,33 +1,60 @@
-$(document).ready(function() {
-
-
 /**
  * @file App Builder
  * @copyright kalmeer media 2014
  * @author seeward@gmail.com
  */
 
-       /**
- * global obj to hold init params
- * @name Options
- * @prop {boolean} debug - sets up user for debug viewing
- * @prop {boolean} GitHub - toggles GH integration
- * @prop {boolean} kalmeerMode - toogles light and dark themes
 
- */
+$(document).ready(function() {
+
+
+    /**
+     * global obj to hold init params
+     * @name Options
+     * @prop {boolean} debug - sets up user for debug viewing
+     * @prop {boolean} GitHub - toggles GH integration
+     * @prop {boolean} kalmeerMode - toogles light and dark themes
+     
+     */
+
+
+    /* 
+     ******************************************************************************************
+     ******************************************************************************************
+     ******************************************************************************************
+     ******************************************************************************************
+     ******************************************************************************************
+     ******************************************************************************************
+     ******************************************************************************************
+     ******************************************************************************************
+     ******************************************************************************************
+     
+     *  __ __  ____ ____    _____
+     * |  |  |/    |    \  / ___/
+     * |  |  |  o  |  D  )(   \_
+     * |  |  |     |    /  \__  |
+     * |  :  |  _  |    \  /  \ |
+     *  \   /|  |  |  .  \ \    |
+     *   \_/ |__|__|__|\_|  \___|
+     
+     
+     
+     */
+
+
     var options = {
-        debug: true,
+        debug: false,
         GitHub: true,
-        kalmeerMode: true
+        kalmeerMode: false
 
     };
 
 
     var loader = "<img src='loader.gif' />";
 
-    // var fro Github API object
+    // var for Github API object
     var gh = {};
-           /**
+    /**
  * global obj to hold user detials
  * @name currentUser
  * @prop {string} user - logged in username
@@ -36,7 +63,7 @@ $(document).ready(function() {
  */
     var currentUser = {};
 
-           /**
+    /**
  * main editor javascript
  * @name jseditor
  
@@ -48,7 +75,7 @@ $(document).ready(function() {
     jseditor.$blockScrolling = Infinity;
     jseditor.getSession().setMode("ace/mode/javascript");
 
-           /**
+    /**
  * main editor html
  * @name htmleditor
  
@@ -59,7 +86,7 @@ $(document).ready(function() {
     htmleditor.setTheme("ace/theme/chrome");
     htmleditor.$blockScrolling = Infinity;
     htmleditor.getSession().setMode("ace/mode/html");
-           /**
+    /**
  * main editor css
  * @name csseditor
  
@@ -72,7 +99,7 @@ $(document).ready(function() {
     csseditor.getSession().setMode("ace/mode/css");
 
 
-           /**
+    /**
  * pointer to current note and temp files for note processing
  * @name currentNote
  
@@ -81,7 +108,45 @@ $(document).ready(function() {
     var tempFile = "";
     var newHold = "";
 
-    // Functions
+
+    /**
+******************************************************************************************
+******************************************************************************************
+******************************************************************************************
+******************************************************************************************
+******************************************************************************************
+******************************************************************************************
+******************************************************************************************
+******************************************************************************************
+******************************************************************************************
+* _____  __ __  ____     __ _____
+*|     ||  T  T|    \   /  ] ___/
+*|   __j|  |  ||  _  Y /  (   \_ 
+*|  l_  |  |  ||  |  |/  / \__  T
+*|   _] |  :  ||  |  /   \_/  \ |
+*|  T   l     ||  |  \     \    |
+*l__j    \__,_jl__j__j\____j\___j
+                                
+*/
+
+
+    var former = console.log;
+    console.log = function(msg) {
+        former.apply(console, arguments); //maintains existing logging via the console.
+
+        if (options.debug == true) {
+            $("#msgBox").html(msg);
+            $("#msgBox").slideDown();
+        }
+
+    }
+
+    window.onerror = function(message, url, linenumber) {
+        console.log("JavaScript error: " + message + " on line " +
+            linenumber + " for " + url);
+    }
+
+
 
 
     /**
@@ -96,8 +161,8 @@ $(document).ready(function() {
         file[key] = {
             content: dataToWrite
         };
-        $("#msgBox").fadeIn().html(loader + " Writing file to GitHub...");
-        console.log("Writing file to GitHub...");
+        $("#msgBox").slideDown().html(loader + " Writing file to GitHub...");
+        //console.log("Writing file to GitHub...");
         files = {
             "exportFromAppBuilder.txt": {
                 content: dataToWrite
@@ -106,10 +171,10 @@ $(document).ready(function() {
         gh.getGist().create(file)
             .done(function(gist) {
                 //console.log(JSON.stringify(gist));
-                $("#msgBox").html("<span class='glyphicon glyphicon-ok'></span> GIST saved successfully");
-                $("#msgBox").show();
+                $("#msgBox").html("<h4>GIST saved successfully</h4>");
+                $("#msgBox").slideDown();
                 setTimeout(function() {
-                    $("#msgBox").fadeOut();
+                    $("#msgBox").slideUp();
                 }, 2000);
             });
     };
@@ -188,7 +253,7 @@ $(document).ready(function() {
 
         for (var i = 0; i < 5; i++)
             text += possible.charAt(Math.floor(Math.random() * possible.length));
-        console.log(text);
+        console.log("New ID generated:  " + text);
         return text;
     }
 
@@ -206,25 +271,29 @@ $(document).ready(function() {
             saver.author = us.user;
             saver.createdDate = new Date();
             saver.id = makeId();
-            console.log(saver.id);
+            //console.log(saver.id);
             saver.type = "Web App";
 
             currentNote = saver.title;
             $(".current").html(currentNote);
             if (saver.title != null) {
                 window.localStorage.setItem(saver.title, JSON.stringify(saver));
-                $("#msgBox").html("<span class='glyphicon glyphicon-ok'>Project saved!</span>").fadeIn();
+                $("#msgBox").html("<h4>Project Saved!</h4>").slideDown();
             }
         } else {
             saver = JSON.parse(window.localStorage.getItem("cache"));
             //saver.id = makeId();
             //console.log(saver.id);
             window.localStorage.setItem(currentNote, JSON.stringify(saver));
-            $("#msgBox").html("<span class='glyphicon glyphicon-ok'>Project saved!</span>").fadeIn();
+            $("#msgBox").html("<h4>Project Saved!</h4>").slideUp();
 
         }
 
         getSaved();
+
+        setTimeout(function() {
+            $("#msgBox").slideUp();
+        }, 2000);
     };
 
 
@@ -233,6 +302,7 @@ $(document).ready(function() {
      * @method getSaved
      */
     var getSaved = function() {
+        var ind = true;
         var x = 0;
         $("#consoleLog").html("");
         keys = Object.keys(localStorage);
@@ -245,8 +315,20 @@ $(document).ready(function() {
 
             if (obj != "u") {
                 if (obj != "cache") {
-                    // console.log(obj);
-                    $("#consoleLog").append("<tr><td><a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-default righter' id='" + obj + "'>" + obj + "</a></td></tr>");
+
+                    if (ind == true) {
+
+                        $("#consoleLog").append("<tr><td><a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-lighter' id='" + obj + "'>" + obj + "</a></td></tr>");
+
+                        ind = !ind;
+                        //console.log(ind);
+                    } else {
+
+                        $("#consoleLog").append("<tr><td><a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-light' id='" + obj + "'>" + obj + "</a></td></tr>");
+                        ind = !ind;
+                        //console.log(ind);
+                    }
+
                 };
             }
         });
@@ -267,7 +349,7 @@ $(document).ready(function() {
             // Setup iFrame structure
             iframe_doc2 = iframe2.contentDocument;
         // Write to iFrame
-        console.log("<---------- Rendering Output Successful ----------->");
+
         iframe_doc2.open();
         iframe_doc2.write(source2);
         iframe_doc2.close();
@@ -290,7 +372,7 @@ $(document).ready(function() {
             // Setup iFrame structure
             iframe_doc = iframe.contentDocument;
         // Write to iFrame
-        console.log("<---------- Rendering Output Successful ----------->");
+        //console.log("Output Successful");
         iframe_doc.open();
         iframe_doc.write(source);
         iframe_doc.close();
@@ -306,6 +388,7 @@ $(document).ready(function() {
      * @return src
      */
     var prepareSource = function() {
+
         // Gather textarea values
         var html = htmleditor.getValue(),
             css = csseditor.getValue(),
@@ -342,6 +425,7 @@ $(document).ready(function() {
      * @method importer
      */
     var importer = function() {
+        console.log("Importing projects...");
         $.getJSON("backup.json", function(data) {
             $.each(data, function(i, o) {
 
@@ -375,16 +459,77 @@ $(document).ready(function() {
     };
 
 
+    /**
+     ******************************************************************************************
+     ******************************************************************************************
+     ******************************************************************************************
+     ******************************************************************************************
+     ******************************************************************************************
+     ******************************************************************************************
+     ******************************************************************************************
+     ******************************************************************************************
+     
+     *   ___ __ __    ___  ____   ______  _____
+     *  /  _]  T  |  /  _]|    \ |      T/ ___/
+     * /  [_|  |  | /  [_ |  _  Y|      (   \_
+     *Y    _]  |  |Y    _]|  |  |l_j  l_j\__  T
+     *|   [_l  :  !|   [_ |  |  |  |  |  /  \ |
+     *|     T\   / |     T|  |  |  |  |  \    |
+     *l_____j \_/  l_____jl__j__j  l__j   \___j
+     *
+     */
 
 
+    $("#shower").click(function() {
+        
+        var curr = JSON.parse(window.localStorage.getItem(currentNote));
+        if (curr != null) {
+            $("#projDetails").modal("show");
+            console.log(curr.name, curr.type, curr.author);
+
+            $("#projName").val(curr.name);
+            $("#projAuthor").val(curr.author);
+            $("#projType").val(curr.type);
+
+        } else {
+            $("#msgBox").html("<h4>You must create or load a new project to edit details.</h4>").slideDown();
+            setTimeout(function() {
+                $("#msgBox").slideUp();
+            }, 2000);
+        }
+
+
+    });
+
+
+    $("#saveProjDetails").click(function() {
+        $("#projDetails").modal('hide');
+
+
+        var cur = JSON.parse(window.localStorage.getItem(currentNote));
+        cur.name = $("#projName").val();
+        cur.author = $("#projAuthor").val();
+        cur.type = $("#projType").val();
+
+        if (cur.date == undefined) {
+            cur.date - new Date();
+        }
+
+        window.localStorage.setItem(currentNote, JSON.stringify(cur));
+        console.log("e:saveProjDetails");
+        $("#msgBox").html("<h4>Project details saved!</h4>").slideDown();
+        setTimeout(function() {
+            $("#msgBox").slideUp();
+        }, 2000);
+    });
 
     /**
- * fix for ACE editor no updating
- * @name toggleFocus
- * @function
- * @global
- * @param shown.bs.tab - event when tab is selected
- */
+     * fix for ACE editor no updating
+     * @name toggleFocus
+     * @function
+     * @global
+     * @param shown.bs.tab - event when tab is selected
+     */
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
         var target = $(e.target).attr("href");
@@ -393,47 +538,50 @@ $(document).ready(function() {
             case "#js":
                 jseditor.focus();
                 jseditor.gotoLine(1);
-                console.log("jseditor");
-                return
+                console.log("jseditor selected");
+                return;
             case "#css":
                 csseditor.focus();
                 csseditor.gotoLine(1);
-                console.log("csseditor");
+                console.log("csseditor selected");
+                return;
             case "#html":
                 htmleditor.focus();
                 htmleditor.gotoLine(1);
-                console.log("htmleditor");
+                console.log("htmleditor selected");
         }
     });
 
     /**
- * remove user details
- * @name logOut
- * @function
- * @global
- * @param event - event logout button is pressed
- */
+     * remove user details
+     * @name logOut
+     * @function
+     * @global
+     * @param event - event logout button is pressed
+     */
 
 
     $("#logout").click(function(e) {
         e.preventDefault();
+        console.log("e:saveProjDetails");
         window.localStorage.removeItem("u");
-        $("#msgBox").show().html("User Logged Out!");
+        $("#msgBox").slideDown().html("User Logged Out!");
         setTimeout(function() {
-            $("#msgBox").hide();
+            $("#msgBox").slideUp();
         }, 3000);
     });
 
     /**
- * begin new mobile app project
- * @name mobileIntsert
- * @function
- * @global
- * @param event - event logout button is pressed
- */
+     * begin new mobile app project
+     * @name mobileIntsert
+     * @function
+     * @global
+     * @param event - event logout button is pressed
+     */
 
     $("#mobiInsert").click(function(e) {
         e.preventDefault();
+        console.log("e:mobiInsert");
         htmleditor.setValue(mobileHTML);
         jseditor.setValue(jsTest);
 
@@ -441,12 +589,12 @@ $(document).ready(function() {
     });
 
     /**
- * init the searcher function for projects table
- * @name searcher
- * @function
- * @global
- * @param event - event on init()
- */
+     * init the searcher function for projects table
+     * @name searcher
+     * @function
+     * @global
+     * @param event - event on init()
+     */
 
     $("#consoleLog").searcher({
         inputSelector: "#searchTerm"
@@ -454,22 +602,23 @@ $(document).ready(function() {
     });
 
     /**
- * export to GH event
- * @name export
- * @function
- * @global
- * @param event - event export button is pressed
- */
+     * export to GH event
+     * @name export
+     * @function
+     * @global
+     * @param event - event export button is pressed
+     */
 
     $("#exportToGitHub").click(function(e) {
         e.preventDefault();
+        console.log("e:exportToGitHub");
         exportToGitHub();
     });
 
 
     $("#export").click(function(e) {
         e.preventDefault();
-
+        console.log("e:export");
         if (jseditor.getValue() != "" && csseditor.getValue() != "" && htmleditor.getValue() != "") {
 
             toFile = prepareSource();
@@ -478,77 +627,90 @@ $(document).ready(function() {
             //console.log(currentNote);
 
         } else {
-            $("#msgBox").html("<span class='glyphicon glyphicon-ban-circle fonter'>You cannot export an empty project.</span>").fadeIn();
+            $("#msgBox").html("<h4>You cannot export an empty project.</h4>").slideDown();
 
             setTimeout(function() {
-                $("#msgBox").fadeOut();
+                $("#msgBox").slideUp();
             }, 3000);
         }
     });
 
-        /**
- * screen size button for desktop
- * @name desktop
- * @function
- * @global
- * @param event - event desktop button is pressed
- */
+    /**
+     * screen size button for desktop
+     * @name desktop
+     * @function
+     * @global
+     * @param event - event desktop button is pressed
+     */
 
 
     $("#desktop").click(function() {
+        console.log("e:desktop");
         $("#output").css("width", "100%");
         render();
     });
 
-            /**
- * screen size button for tablet
- * @name tablet
- * @function
- * @global
- * @param event - event tablet button is pressed
- */
+    /**
+     * screen size button for tablet
+     * @name tablet
+     * @function
+     * @global
+     * @param event - event tablet button is pressed
+     */
 
     $("#tablet").click(function() {
+        console.log("e:tablet");
         $("#output").css("width", "1024px");
         render();
     });
-        /**
- * screen size button for mobile
- * @name mobile
- * @function
- * @global
- * @param event - event mobile button is pressed
- */
+    /**
+     * screen size button for mobile
+     * @name mobile
+     * @function
+     * @global
+     * @param event - event mobile button is pressed
+     */
     $("#mobile").click(function() {
+        console.log("e:mobile");
         $("#output").css("width", "400px");
         render();
     });
 
 
-        /**
- * begin new polymer element project
- * @name inserter
- * @function
- * @global
- * @param event - insert Polymer element starter files
- */
+    /**
+     * begin new polymer element project
+     * @name inserter
+     * @function
+     * @global
+     * @param event - insert Polymer element starter files
+     */
     $("#inserter").click(function(e) {
+        console.log("e:inserter");
+
+
         e.preventDefault();
         jseditor.setValue("");
         csseditor.setValue("");
-        htmleditor.setValue(polyTemp);
+        //htmleditor.setValue(polyTemp);
+        var newTemp = $('#polymerTemp').html();
+        newTemp = newTemp.replace(/CHANGE/g, "script");
+        var template = newTemp;
+        Mustache.parse(template);
+        var rendered = Mustache.render(template, {});
+        htmleditor.setValue(rendered);
 
     });
 
 
-           /**
- * clear all three editors
- * @name clear
- * @function
- * @global
- * @param event - event clear button is pressed
- */
+    /**
+     * clear all three editors
+     * @name clear
+     * @function
+     * @global
+     * @param event - event clear button is pressed
+     */
     $("#clear").click(function() {
+        console.log("e:clear");
         jseditor.setValue("");
         csseditor.setValue("");
         htmleditor.setValue("");
@@ -563,22 +725,25 @@ $(document).ready(function() {
 
     // render iFrame
     $("#go").click(function() {
+        console.log("e:goRender");
         render();
     });
     // save project
     $("#saver").click(function() {
+        console.log("e:saveProject");
         saveProject();
     });
 
-            /**
- * event to load selected project into editors
- * @name loadProject
- * @function
- * @global
- * @param event - event project button is pressed
- */
+    /**
+     * event to load selected project into editors
+     * @name loadProject
+     * @function
+     * @global
+     * @param event - event project button is pressed
+     */
 
     $("#consoleLog").on("click", "a", function(e) {
+        console.log("e:loadProject");
         note = $(this).text();
         $("#currentInfo").html("");
         newNote = JSON.parse(window.localStorage.getItem(note));
@@ -600,15 +765,16 @@ $(document).ready(function() {
 
     });
 
-            /**
- * delete project
- * @name deleter
- * @function
- * @global
- * @param event - event delete button is pressed
- */
+    /**
+     * delete project
+     * @name deleter
+     * @function
+     * @global
+     * @param event - event delete button is pressed
+     */
 
     $("#deleter").click(function() {
+        console.log("e:deleter");
         jseditor.setValue("");
         csseditor.setValue("");
         htmleditor.setValue("");
@@ -690,32 +856,44 @@ $(document).ready(function() {
 
     });
 
-        /**
- * screen size button for fullScreen
- * @name fullScreen
- * @function
- * @global
- * @param event - event fullScreen button is pressed
- */
+    /**
+     * screen size button for fullScreen
+     * @name fullScreen
+     * @function
+     * @global
+     * @param event - event fullScreen button is pressed
+     */
 
     $("#fullScreen").click(function() {
-
+        console.log("e:fullScreen");
         renderFull();
 
     });
 
-            /**
- * toggle light and dark themes
- * @name kalmeer
- * @function
- * @global
- * @param event - event kalmeerMode button is pressed
- */
+
+    $("#debug").click(function(e) {
+        e.preventDefault();
+        options.debug = !options.debug;
+        console.log("e:debug :: " + options.debug);
+
+        setTimeout(function() {
+            $("#msgBox").slideUp();
+        }, 2000);
+
+    });
+
+    /**
+     * toggle light and dark themes
+     * @name kalmeer
+     * @function
+     * @global
+     * @param event - event kalmeerMode button is pressed
+     */
 
 
     $("#kalmeer").click(function(e) {
         e.preventDefault();
-
+        console.log("e:kalmeer");
         if (kalmeerMode == true) {
             $("#jsBody").css("background-color", "black");
             $("#jsBody").css("color", "white");
@@ -741,6 +919,27 @@ $(document).ready(function() {
 
 
     /**
+     ******************************************************************************************
+     ******************************************************************************************
+     ******************************************************************************************
+     ******************************************************************************************
+     ******************************************************************************************
+     ******************************************************************************************
+     ******************************************************************************************
+     ******************************************************************************************
+     ******************************************************************************************
+     * ____  ____   ____  ______
+     *l    j|    \ l    j|      T
+     * |  T |  _  Y |  T |      |
+     * |  | |  |  | |  | l_j  l_j
+     * |  | |  |  | |  |   |  |
+     * j  l |  |  | j  l   |  |
+     *|____jl__j__j|____j  l__j
+     *
+     */
+
+
+    /**
      * global init() function
      * @method init
      * @param {object} options
@@ -749,13 +948,16 @@ $(document).ready(function() {
 
         kalmeerMode = options.kalmeerMode;
 
+        if (kalmeerMode == true) {
+            $("#kalmeer").trigger("click");
+        }
         if (options.debug == true) {
             console.log("DEBUG MODE");
         }
         //addType();
         //window.localStorage.clear();
         //window.localStorage.removeItem("Parse/COrDTZjsSjOUkiIDHUXiEVdgWfqlURUbm3wKPGJW/installationId");
-        $("#msgBox").hide();
+        $("#msgBox").slideUp();
         //importer();
         if (window.localStorage.getItem("u")) {
             currentUserCache = JSON.parse(window.localStorage.getItem("u"));
@@ -770,15 +972,11 @@ $(document).ready(function() {
         restoreFromCache();
         getSaved();
 
-
-
-
-
-
     };
 
-    init(options);
+    // run init() method with options obj defined at the top
 
+    init(options);
 
 
 });
