@@ -5,7 +5,10 @@
  */
 
 
+
 $(document).ready(function() {
+
+
 
 
     /**
@@ -170,8 +173,18 @@ $(document).ready(function() {
         };
         gh.getGist().create(file)
             .done(function(gist) {
-                //console.log(JSON.stringify(gist));
-                $("#msgBox").html("<h4>GIST saved successfully</h4>");
+
+
+                $("#msgBox").html("<h4>Backup GIST saved successfully</h4>");
+
+                if (fileName == 'fullProjectsBackup.json') {
+                    uObj = JSON.parse(window.localStorage.getItem('u'));
+                    url_ = "https://gist.githubusercontent.com/" + currentUser + "/" + gist.id + "/raw/";
+                    uObj.backUpUrl = url_;
+                    window.localStorage.setItem('u', JSON.stringify(uObj));
+                    //console.log(uObj.backUpUrl);
+
+                }
                 $("#msgBox").slideDown();
                 setTimeout(function() {
                     $("#msgBox").slideUp();
@@ -179,6 +192,45 @@ $(document).ready(function() {
             });
     };
 
+    /**
+     * `get backup GIST
+     * @method restoreFromGitHub
+     */
+
+    var restoreFromGitHub = function() {
+        var bu = JSON.parse(window.localStorage.getItem('u'));
+        if (bu == null) {
+            alert("You must be logged into to restore a backup");
+            return;
+        }
+
+        if (bu.backUpUrl == null || bu.backUpUrl == undefined) {
+
+            restore_ = prompt("GIST ID: ");
+
+            url_ = "https://gist.githubusercontent.com/" + bu.user + "/" + restore_ + "/raw/";
+            bu.backUpUrl = url_;
+            window.localStorage.setItem("u", JSON.stringify(bu));
+
+            $.getJSON(url_, function(data) {
+                console.log("restoring fro GIST");
+                importer(data);
+
+            });
+
+            restore_ = "";
+        } else {
+            restore_ = bu.backUpUrl;
+
+            $.getJSON(restore_, function(data) {
+                console.log("restore");
+                importer(data);
+            });
+
+            restore_ = "";
+        }
+
+    };
 
     /**
      * build up object to export
@@ -288,7 +340,7 @@ $(document).ready(function() {
             $("#msgBox").html("<h4>Project Saved!</h4>").slideUp();
 
         }
-
+        //refresh the saved projects list
         getSaved();
 
         setTimeout(function() {
@@ -424,16 +476,34 @@ $(document).ready(function() {
      * helper function to import JSON backups
      * @method importer
      */
-    var importer = function() {
+    var importer = function(data) {
         console.log("Importing projects...");
-        $.getJSON("backup.json", function(data) {
-            $.each(data, function(i, o) {
+        $.each(data, function(i, o) {
+            //console.log(o);
+            window.localStorage.setItem(o.name, JSON.stringify(o));
+        });
+        getSaved();
 
-                window.localStorage.setItem(o.name, JSON.stringify(o));
+    };
+
+
+    var getZ = function(){
+        gh.getZen().then(function(msg) {
+                $("#msgBox").html(JSON.stringify(msg)).fadeIn();
             });
 
-        });
+        setTimeout(function(){
+            $("#msgBox").fadeOut();
+        },5000);
+
     };
+
+
+    $("#re").click(function(e){
+        e.preventDefault();
+        getZ();
+    });
+
 
     /**
      * helper function to add properties to currentProject obj
@@ -481,7 +551,7 @@ $(document).ready(function() {
 
 
     $("#shower").click(function() {
-        
+
         var curr = JSON.parse(window.localStorage.getItem(currentNote));
         if (curr != null) {
             $("#projDetails").modal("show");
@@ -615,10 +685,45 @@ $(document).ready(function() {
         exportToGitHub();
     });
 
+    $("#restoreFromGitHub").click(function(e) {
+        e.preventDefault();
+        console.log("e:restoreFromGitHub");
+        restoreFromGitHub();
+    });
+
 
     $("#export").click(function(e) {
         e.preventDefault();
+        var toFile_ = {};
         console.log("e:export");
+        if (jseditor.getValue() != "" && csseditor.getValue() != "" && htmleditor.getValue() != "") {
+
+            j = jseditor.getValue();
+            h = htmleditor.getValue();
+            c = csseditor.getValue();
+
+            toFile_.js = j;
+            toFile_.html = h;
+            toFile_.css = c;
+
+            toFile_ = JSON.stringify(toFile_);
+            exportName = currentNote+".json";
+            //window.location = "data:application/octet-stream," + escape(toFile);
+            createGist(exportName, toFile_);
+            //console.log(currentNote);
+
+        } else {
+            $("#msgBox").html("<h4>You cannot export an empty project.</h4>").slideDown();
+
+            setTimeout(function() {
+                $("#msgBox").slideUp();
+            }, 3000);
+        }
+    });
+
+    $("#prepare").click(function(e) {
+        e.preventDefault();
+        console.log("e:prepare");
         if (jseditor.getValue() != "" && csseditor.getValue() != "" && htmleditor.getValue() != "") {
 
             toFile = prepareSource();
@@ -944,7 +1049,8 @@ $(document).ready(function() {
      * @method init
      * @param {object} options
      */
-    function init(options) {
+    var init = function(options) {
+
 
         kalmeerMode = options.kalmeerMode;
 
@@ -967,6 +1073,13 @@ $(document).ready(function() {
                 username: currentUserCache.user,
                 password: currentUserCache.pass
             });
+
+            getZ();
+
+            /*var user_ = gh.getUser("seeward");
+            user_.getGists().then(function(gists) {
+                console.log(JSON.stringify(gists[0]));
+            });*/
         }
         initLog = "\n<------------- init successful ------------->";
         restoreFromCache();
