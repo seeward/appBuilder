@@ -171,6 +171,8 @@ $(document).ready(function() {
                 content: dataToWrite
             }
         };
+
+        
         gh.getGist().create(file)
             .done(function(gist) {
 
