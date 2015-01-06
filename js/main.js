@@ -172,7 +172,7 @@ $(document).ready(function() {
             }
         };
 
-        
+
         gh.getGist().create(file)
             .done(function(gist) {
 
@@ -187,15 +187,13 @@ $(document).ready(function() {
                     //console.log(uObj.backUpUrl);
 
                 }
-                $("#msgBox").slideDown();
-                setTimeout(function() {
-                    $("#msgBox").slideUp();
-                }, 2000);
+                $("#msgBox").slideDown().delay(2500).slideUp();
+
             });
     };
 
     /**
-     * `get backup GIST
+     * get backup GIST
      * @method restoreFromGitHub
      */
 
@@ -332,22 +330,20 @@ $(document).ready(function() {
             $(".current").html(currentNote);
             if (saver.title != null) {
                 window.localStorage.setItem(saver.title, JSON.stringify(saver));
-                $("#msgBox").html("<h4>Project Saved!</h4>").slideDown();
+                $("#msgBox").html("<h4>Project Saved!</h4>").slideDown().delay(2500).slideUp();
             }
         } else {
             saver = JSON.parse(window.localStorage.getItem("cache"));
             //saver.id = makeId();
             //console.log(saver.id);
             window.localStorage.setItem(currentNote, JSON.stringify(saver));
-            $("#msgBox").html("<h4>Project Saved!</h4>").slideUp();
+            $("#msgBox").html("<h4>Project Saved!</h4>").slideDown().delay(2500).slideUp();
 
         }
         //refresh the saved projects list
         getSaved();
 
-        setTimeout(function() {
-            $("#msgBox").slideUp();
-        }, 2000);
+
     };
 
 
@@ -489,19 +485,18 @@ $(document).ready(function() {
     };
 
 
-    var getZ = function(){
+    var getZ = function() {
         gh.getZen().then(function(msg) {
-                $("#msgBox").html(JSON.stringify(msg)).fadeIn();
-            });
 
-        setTimeout(function(){
-            $("#msgBox").fadeOut();
-        },5000);
+            $("#msgBox").html("<h4>"+JSON.stringify(msg)+"</h4>").fadeIn().delay(2500).slideUp();
+        });
+
+
 
     };
 
 
-    $("#re").click(function(e){
+    $("#re").click(function(e) {
         e.preventDefault();
         getZ();
     });
@@ -552,6 +547,11 @@ $(document).ready(function() {
      */
 
 
+$("#toggler").click(function(e){
+    e.preventDefault();
+    $("#editors").toggleClass("fullscreen");
+});
+
     $("#shower").click(function() {
 
         var curr = JSON.parse(window.localStorage.getItem(currentNote));
@@ -564,10 +564,8 @@ $(document).ready(function() {
             $("#projType").val(curr.type);
 
         } else {
-            $("#msgBox").html("<h4>You must create or load a new project to edit details.</h4>").slideDown();
-            setTimeout(function() {
-                $("#msgBox").slideUp();
-            }, 2000);
+            $("#msgBox").html("<h4>You must create or load a new project to edit details.</h4>").slideDown().delay(2500).slideUp();
+
         }
 
 
@@ -589,10 +587,8 @@ $(document).ready(function() {
 
         window.localStorage.setItem(currentNote, JSON.stringify(cur));
         console.log("e:saveProjDetails");
-        $("#msgBox").html("<h4>Project details saved!</h4>").slideDown();
-        setTimeout(function() {
-            $("#msgBox").slideUp();
-        }, 2000);
+        $("#msgBox").html("<h4>Project details saved!</h4>").slideDown().delay(2500).slideUp();
+
     });
 
     /**
@@ -637,10 +633,8 @@ $(document).ready(function() {
         e.preventDefault();
         console.log("e:saveProjDetails");
         window.localStorage.removeItem("u");
-        $("#msgBox").slideDown().html("User Logged Out!");
-        setTimeout(function() {
-            $("#msgBox").slideUp();
-        }, 3000);
+        $("#msgBox").slideDown().html("User Logged Out!").delay(2500).slideUp();
+
     });
 
     /**
@@ -709,17 +703,15 @@ $(document).ready(function() {
             toFile_.css = c;
 
             toFile_ = JSON.stringify(toFile_);
-            exportName = currentNote+".json";
+            exportName = currentNote + ".json";
             //window.location = "data:application/octet-stream," + escape(toFile);
             createGist(exportName, toFile_);
             //console.log(currentNote);
 
         } else {
-            $("#msgBox").html("<h4>You cannot export an empty project.</h4>").slideDown();
+            $("#msgBox").html("<h4>You cannot export an empty project.</h4>").slideDown().delay(2500).slideUp();
 
-            setTimeout(function() {
-                $("#msgBox").slideUp();
-            }, 3000);
+
         }
     });
 
@@ -734,11 +726,8 @@ $(document).ready(function() {
             //console.log(currentNote);
 
         } else {
-            $("#msgBox").html("<h4>You cannot export an empty project.</h4>").slideDown();
+            $("#msgBox").html("<h4>You cannot export an empty project.</h4>").slideDown().delay(2500).slideUp();
 
-            setTimeout(function() {
-                $("#msgBox").slideUp();
-            }, 3000);
         }
     });
 
@@ -793,8 +782,6 @@ $(document).ready(function() {
      */
     $("#inserter").click(function(e) {
         console.log("e:inserter");
-
-
         e.preventDefault();
         jseditor.setValue("");
         csseditor.setValue("");
@@ -861,9 +848,6 @@ $(document).ready(function() {
 
         currentNote = note;
         $(".current").html(currentNote);
-        //$("#currentInfo").append("<tr><td>Type: </td><td>" + newNote.type + "</td></tr>");
-        //$("#currentInfo").append("<tr><td>Author: </td><td>" + newNote.author + "</td></tr>");
-        // $("#currentInfo").append("<tr><td>Date</td><td>" + newNote.createdDate.substring(0, 10) + "</td></tr>");
         jseditor.setValue(js);
         csseditor.setValue(css);
         htmleditor.setValue(html);
@@ -940,6 +924,21 @@ $(document).ready(function() {
                 });
         }
     });
+
+    //event to catch tab closing to warn user of data offload
+    window.onbeforeunload = function(evt) {
+        var message = 'Closing this tab might remove some of your projects that have not been backed up to Github.';
+        if (typeof evt == 'undefined') {
+            evt = window.event;
+
+        }
+        if (evt) {
+            evt.returnValue = message;
+        }
+
+        return message;
+
+    }
 
     $('#myModal').on('hidden.bs.modal', function(e) {
         e.preventDefault();
@@ -1062,11 +1061,9 @@ $(document).ready(function() {
         if (options.debug == true) {
             console.log("DEBUG MODE");
         }
-        //addType();
-        //window.localStorage.clear();
-        //window.localStorage.removeItem("Parse/COrDTZjsSjOUkiIDHUXiEVdgWfqlURUbm3wKPGJW/installationId");
-        $("#msgBox").slideUp();
-        //importer();
+
+
+
         if (window.localStorage.getItem("u")) {
             currentUserCache = JSON.parse(window.localStorage.getItem("u"));
             currentUser = currentUserCache.user;
@@ -1076,12 +1073,15 @@ $(document).ready(function() {
                 password: currentUserCache.pass
             });
 
+            // helper method to verify that guthub api is connected on init()
             getZ();
 
+            // GIST list for logged in user FOR LATER USE
             /*var user_ = gh.getUser("seeward");
             user_.getGists().then(function(gists) {
                 console.log(JSON.stringify(gists[0]));
             });*/
+
         }
         initLog = "\n<------------- init successful ------------->";
         restoreFromCache();
