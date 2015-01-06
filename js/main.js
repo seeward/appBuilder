@@ -132,8 +132,9 @@ $(document).ready(function() {
                                 
 */
 
-
+    
     var former = console.log;
+
     console.log = function(msg) {
         former.apply(console, arguments); //maintains existing logging via the console.
 
@@ -143,11 +144,8 @@ $(document).ready(function() {
         }
 
     }
+    
 
-    window.onerror = function(message, url, linenumber) {
-        console.log("JavaScript error: " + message + " on line " +
-            linenumber + " for " + url);
-    }
 
 
 
