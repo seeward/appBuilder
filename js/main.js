@@ -361,8 +361,10 @@ $(document).ready(function() {
                 x = x + 10;
             }
 
-            if (obj != "u") {
-                if (obj != "cache") {
+            if (obj === "u" || obj === "cache" || obj.match(/Parse/g)) { 
+
+            } else {
+                
 
                     if (ind == true) {
 
@@ -377,7 +379,7 @@ $(document).ready(function() {
                         //console.log(ind);
                     }
 
-                };
+              
             }
         });
     };
@@ -545,9 +547,17 @@ $(document).ready(function() {
      */
 
 
-$("#toggler").click(function(e){
+$("#fullEdit").click(function(e){
     e.preventDefault();
-    $("#editors").toggleClass("fullscreen");
+    $("#jsEditor").toggleClass('fullscreen');
+    $("#cssEditor").toggleClass('fullscreen');
+    $("#htmlEditor").toggleClass('fullscreen');
+
+
+
+    jseditor.resize();
+    csseditor.resize();
+    htmleditor.resize();
 });
 
     $("#shower").click(function() {
