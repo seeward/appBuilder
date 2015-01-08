@@ -112,6 +112,8 @@ $(document).ready(function() {
     var newHold = "";
 
 
+
+
     /**
 ******************************************************************************************
 ******************************************************************************************
@@ -132,7 +134,7 @@ $(document).ready(function() {
                                 
 */
 
-    
+
     var former = console.log;
 
     console.log = function(msg) {
@@ -144,7 +146,7 @@ $(document).ready(function() {
         }
 
     }
-    
+
 
 
 
@@ -240,8 +242,10 @@ $(document).ready(function() {
         //console.log(keys);
         $.each(keys, function(i, obj) {
             //console.log(JSON.stringify(obj));
-            if (obj != "cache") {
-                //console.log(obj);
+            if (obj === "u" || obj === "cache" || obj.match(/Parse/g)) {
+                console.log(obj);
+
+            } else {
                 eachProject = JSON.parse(window.localStorage.getItem(obj));
                 if (eachProject.html) {
                     holder.push(eachProject);
@@ -361,25 +365,25 @@ $(document).ready(function() {
                 x = x + 10;
             }
 
-            if (obj === "u" || obj === "cache" || obj.match(/Parse/g)) { 
+            if (obj === "u" || obj === "cache" || obj.match(/Parse/g)) {
 
             } else {
-                
 
-                    if (ind == true) {
 
-                        $("#consoleLog").append("<tr><td><a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-lighter' id='" + obj + "'>" + obj + "</a></td></tr>");
+                if (ind == true) {
 
-                        ind = !ind;
-                        //console.log(ind);
-                    } else {
+                    $("#consoleLog").append("<tr><td><a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-lighter' id='" + obj + "'>" + obj + "</a></td></tr>");
 
-                        $("#consoleLog").append("<tr><td><a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-light' id='" + obj + "'>" + obj + "</a></td></tr>");
-                        ind = !ind;
-                        //console.log(ind);
-                    }
+                    ind = !ind;
+                    //console.log(ind);
+                } else {
 
-              
+                    $("#consoleLog").append("<tr><td><a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-light' id='" + obj + "'>" + obj + "</a></td></tr>");
+                    ind = !ind;
+                    //console.log(ind);
+                }
+
+
             }
         });
     };
@@ -488,7 +492,7 @@ $(document).ready(function() {
     var getZ = function() {
         gh.getZen().then(function(msg) {
 
-            $("#msgBox").html("<h4>"+JSON.stringify(msg)+"</h4>").fadeIn().delay(2500).slideUp();
+            $("#msgBox").html("<h4>" + JSON.stringify(msg) + "</h4>").fadeIn().delay(2500).slideUp();
         });
 
 
@@ -526,6 +530,34 @@ $(document).ready(function() {
     };
 
 
+
+
+    var componentSource = function() {
+        // Gather textarea values
+        var html = htmleditor.getValue(),
+            css = csseditor.getValue(),
+            js = jseditor.getValue(),
+            //lib = $("#libcss").val();
+            // libjs = $("#libjs").val();
+            src2 = '';
+
+        // Insert values into src template
+
+        // HTML
+
+
+        // CSS
+
+        src2 += '<style>'+ css + '</style>';
+        src2 += html;
+
+        src2 += '<script>'+ js + '</script>';
+
+        // return prepared src with textarea values inserted
+        return src2;
+    };
+
+
     /**
      ******************************************************************************************
      ******************************************************************************************
@@ -547,21 +579,21 @@ $(document).ready(function() {
      */
 
 
-$("#fullEdit").click(function(e){
-    e.preventDefault();
-    $("#jsEditor").toggleClass('fullscreen');
-    $("#cssEditor").toggleClass('fullscreen');
-    $("#htmlEditor").toggleClass('fullscreen');
+    $("#fullEdit").click(function(e) {
+        e.preventDefault();
+        $("#jsEditor").toggleClass('fullscreen');
+        $("#cssEditor").toggleClass('fullscreen');
+        $("#htmlEditor").toggleClass('fullscreen');
 
 
 
-    jseditor.resize();
-    csseditor.resize();
-    htmleditor.resize();
-});
+        jseditor.resize();
+        csseditor.resize();
+        htmleditor.resize();
+    });
 
     $("#shower").click(function() {
-
+        console.log(currentNote);
         var curr = JSON.parse(window.localStorage.getItem(currentNote));
         if (curr != null) {
             $("#projDetails").modal("show");
@@ -725,11 +757,19 @@ $("#fullEdit").click(function(e){
 
     $("#prepare").click(function(e) {
         e.preventDefault();
+        var toFile = "";
         console.log("e:prepare");
+        var compToExport = JSON.parse(window.localStorage.getItem(currentNote))
         if (jseditor.getValue() != "" && csseditor.getValue() != "" && htmleditor.getValue() != "") {
 
-            toFile = prepareSource();
-            window.location = "data:application/octet-stream," + escape(toFile);
+            if (compToExport.type == "Component") {
+                toFile = componentSource();
+                window.location = "data:application/octet-stream," + escape(toFile);
+            } else {
+                toFile = prepareSource();
+                window.location = "data:application/octet-stream," + escape(toFile);
+            }
+
             createGist(currentNote, toFile);
             //console.log(currentNote);
 
