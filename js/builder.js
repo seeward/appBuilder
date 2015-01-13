@@ -4,24 +4,54 @@ $(document).ready(function() {
 
 
 
-    var handleDragStart = function(e) {
-       
-       dragEl = e.target.id;
-       console.log(dragEl);
+    var dragStarted = function(e) {
+        dragEl = this;
+        $("#propPanel").html("");
+        elDetails = JSON.parse(window.localStorage.getItem(dragEl.id));
+
+        $("#propPanel").append("<p>name: <strong>"+elDetails.name+"</strong></p>");
+        $("#propPanel").append("<p>name: <strong>"+elDetails.type+"</strong></p>");
+        $("#propPanel").append("<p>name: <strong>"+elDetails.author+"</strong></p>");
+        $("#propPanel").append("<p>name: <strong>"+elDetails.createdDate+"</strong></p>");
+
+
+
+
+
+
+        //console.log(dragEl);
+        this.style.opacity = '0.4';
+        console.log("dragging...");
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', this.innerHTML);
+
     };
 
-    $("#appCanvas1").on("ondragenter", function(e) {
-        console.log("entered");
-       e.preventDefault();
-    });
+    var dragEnt = function(e) {
+        console.log("entering...");
+        e.preventDefault();
 
-    $("#appCanvas1").on("ondrop", function(e) {
-        targetEl = e.target.id;
-       code = JSON.parse(window.localStorage.getItem(targetEl));
-       codeEditor = makeProps(code,targetEl);
-       $("#"+targetEl).html(codeEditor);
-        //console.log(dragEl.id);
-    });
+    };
+
+    var dragOver = function(e){
+        e.preventDefault();
+        return false;
+    };
+
+    var dragDrop = function(e) {
+        console.log("dropped...");
+        dragEl.style.opacity = '1.0';
+        code = JSON.parse(window.localStorage.getItem(dragEl.id));
+
+        html = makeProps(code.props, "appCanvas1");
+        $("#appCanvas1").html(html);
+    };
+    document.getElementById("appCanvas1").addEventListener("dragover", dragOver, false);
+
+    document.getElementById("appCanvas1").addEventListener("dragenter", dragEnt, false);
+    document.getElementById("appCanvas1").addEventListener("drop", dragDrop, false);
+
+
 
 
 
@@ -45,8 +75,9 @@ $(document).ready(function() {
                 $("#compList").append("<button draggable='true' style='cursor: move' class='btn btn-custom comps' id='" + obj2.name + "'>" + obj + "</button>");
                 el = $("#" + obj2.name);
 
-                el.on('dragstart', handleDragStart);
+                document.getElementById(obj2.name).addEventListener('dragstart', dragStarted, false);
             }
+
 
 
 
