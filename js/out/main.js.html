@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: main.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: main.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * @file App Builder
  * @copyright kalmeer media 2014
  * @author seeward@gmail.com
@@ -53,7 +81,7 @@ $(document).ready(function() {
     };
 
 
-    var loader = "<img src='loader.gif' />";
+    var loader = "&lt;img src='loader.gif' />";
 
     // var for Github API object
     var gh = {};
@@ -177,7 +205,7 @@ $(document).ready(function() {
             .done(function(gist) {
 
 
-                $("#msgBox").html("<h4>Backup GIST saved successfully</h4>");
+                $("#msgBox").html("&lt;h4>Backup GIST saved successfully&lt;/h4>");
 
                 if (fileName == 'fullProjectsBackup.json') {
                     uObj = JSON.parse(window.localStorage.getItem('u'));
@@ -213,7 +241,7 @@ $(document).ready(function() {
             window.localStorage.setItem("u", JSON.stringify(bu));
 
             $.getJSON(url_, function(data) {
-                console.log("restoring from GIST");
+                console.log("restoring fro GIST");
                 importer(data);
 
             });
@@ -305,21 +333,11 @@ $(document).ready(function() {
         var text = "";
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-        for (var i = 0; i < 5; i++)
+        for (var i = 0; i &lt; 5; i++)
             text += possible.charAt(Math.floor(Math.random() * possible.length));
         console.log("New ID generated:  " + text);
         return text;
     }
-
-    var listProps = function(rawJs){
-        var propList = rawJs.substring(rawJs.indexOf("@prop")+5,rawJs.indexOf("@end"));
-        var arrStr = propList.split(/[:]/);
-        for(var i=0; i<arrStr.length; i++){
-            console.log(arrStr[i]);
-        }
-
-        return arrStr;
-    };
 
 
     /**
@@ -342,20 +360,18 @@ $(document).ready(function() {
             console.log(currentNote);
             $(".current").html(currentNote);
             window.localStorage.setItem(saver.name, JSON.stringify(saver));
-                $("#msgBox").html("<h4>Project Saved!</h4>").slideDown().delay(2500).slideUp();
+                $("#msgBox").html("&lt;h4>Project Saved!&lt;/h4>").slideDown().delay(2500).slideUp();
         } else {
             
             saver = JSON.parse(window.localStorage.getItem(currentNote));
             cacher = JSON.parse(window.localStorage.getItem("cache"));
             saver.html = cacher.html;
             saver.css = cacher.css;
-            saver.js = cacher.js;
-            saver.props = [];
-            saver.props = listProps(saver.js);
+            saver.html - cacher.html;
             //saver.id = makeId();
             //console.log(saver.id);
             window.localStorage.setItem(currentNote, JSON.stringify(saver));
-            $("#msgBox").html("<h4>Project Saved!</h4>").slideDown().delay(2500).slideUp();
+            $("#msgBox").html("&lt;h4>Project Saved!&lt;/h4>").slideDown().delay(2500).slideUp();
 }
         //refresh the saved projects list
         getSaved();
@@ -375,12 +391,8 @@ $(document).ready(function() {
         //console.log(keys);
         var rows = keys.length;
         $.each(keys, function(i, obj) {
-            //used to tag projects with unique ids
-            //var projToTag = JSON.parse(window.localStorage.getItem(obj));
-            //projToTag.id = makeId();
-            //window.localStorage.setItem(obj,JSON.stringify(projToTag));
-            //console.log(projToTag.id);
 
+            
             if (obj === "u" || obj === "cache" || obj.match(/Parse/g)) {
 
             } else {
@@ -388,13 +400,13 @@ $(document).ready(function() {
 
                 if (ind == true) {
 
-                    $("#consoleLog").append("<tr><td><a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-lighter' id='" + obj + "'>" + obj + "</a></td></tr>");
+                    $("#consoleLog").append("&lt;tr>&lt;td>&lt;a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-lighter' id='" + obj + "'>" + obj + "&lt;/a>&lt;/td>&lt;/tr>");
 
                     ind = !ind;
                    
                 } else {
 
-                    $("#consoleLog").append("<tr><td><a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-light' id='" + obj + "'>" + obj + "</a></td></tr>");
+                    $("#consoleLog").append("&lt;tr>&lt;td>&lt;a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-light' id='" + obj + "'>" + obj + "&lt;/a>&lt;/td>&lt;/tr>");
                     ind = !ind;
                     
                 }
@@ -470,21 +482,21 @@ $(document).ready(function() {
         // Insert values into src template
 
         // HTML
-        src = base_tpl.replace('</body>', html + '</body>');
+        src = base_tpl.replace('&lt;/body>', html + '&lt;/body>');
 
         // CSS
-        css = '<style>' + css + '</style>';
-        src = src.replace('</head>', css + '</head>');
+        css = '&lt;style>' + css + '&lt;/style>';
+        src = src.replace('&lt;/head>', css + '&lt;/head>');
         // Libs css
-        //libs = '<link href="' + lib + '" rel="stylesheet"></link>';
-        //src = src.replace('</head>', libs + '</head>');
+        //libs = '&lt;link href="' + lib + '" rel="stylesheet">&lt;/link>';
+        //src = src.replace('&lt;/head>', libs + '&lt;/head>');
 
         // libs js
-        //libsJS = '<script src="' + libjs + '" type="text/javascript"></script>';
-        //src = src.replace('</head>', libsJS + '</head>');
+        //libsJS = '&lt;script src="' + libjs + '" type="text/javascript">&lt;/script>';
+        //src = src.replace('&lt;/head>', libsJS + '&lt;/head>');
         // Javascript
-        js = '<script>' + js + '</script>';
-        src = src.replace('</body>', js + '</body>');
+        js = '&lt;script>' + js + '&lt;/script>';
+        src = src.replace('&lt;/body>', js + '&lt;/body>');
 
         // return prepared src with textarea values inserted
         return src;
@@ -508,7 +520,7 @@ $(document).ready(function() {
     var getZ = function() {
         gh.getZen().then(function(msg) {
 
-            $("#msgBox").html("<h4>" + JSON.stringify(msg) + "</h4>").fadeIn().delay(2500).slideUp();
+            $("#msgBox").html("&lt;h4>" + JSON.stringify(msg) + "&lt;/h4>").fadeIn().delay(2500).slideUp();
         });
 
 
@@ -564,10 +576,10 @@ $(document).ready(function() {
 
         // CSS
 
-        src2 += '<style>'+ css + '</style>';
+        src2 += '&lt;style>'+ css + '&lt;/style>';
         src2 += html;
 
-        src2 += '<script>'+ js + '</script>';
+        src2 += '&lt;script>'+ js + '&lt;/script>';
 
         // return prepared src with textarea values inserted
         return src2;
@@ -620,7 +632,7 @@ $(document).ready(function() {
             $("#projType").val(curr.type);
 
         } else {
-            $("#msgBox").html("<h4>You must create or load a new project to edit details.</h4>").slideDown().delay(2500).slideUp();
+            $("#msgBox").html("&lt;h4>You must create or load a new project to edit details.&lt;/h4>").slideDown().delay(2500).slideUp();
 
         }
 
@@ -643,7 +655,7 @@ $(document).ready(function() {
 
         window.localStorage.setItem(currentNote, JSON.stringify(cur));
         console.log("e:saveProjDetails");
-        $("#msgBox").html("<h4>Project details saved!</h4>").slideDown().delay(2500).slideUp();
+        $("#msgBox").html("&lt;h4>Project details saved!&lt;/h4>").slideDown().delay(2500).slideUp();
 
     });
 
@@ -748,7 +760,7 @@ $(document).ready(function() {
         e.preventDefault();
         var toFile_ = {};
         console.log("e:export");
-        if (jseditor.getValue() != "" && csseditor.getValue() != "" && htmleditor.getValue() != "") {
+        if (jseditor.getValue() != "" &amp;&amp; csseditor.getValue() != "" &amp;&amp; htmleditor.getValue() != "") {
 
             j = jseditor.getValue();
             h = htmleditor.getValue();
@@ -765,7 +777,7 @@ $(document).ready(function() {
             //console.log(currentNote);
 
         } else {
-            $("#msgBox").html("<h4>You cannot export an empty project.</h4>").slideDown().delay(2500).slideUp();
+            $("#msgBox").html("&lt;h4>You cannot export an empty project.&lt;/h4>").slideDown().delay(2500).slideUp();
 
 
         }
@@ -776,7 +788,7 @@ $(document).ready(function() {
         var toFile = "";
         console.log("e:prepare");
         var compToExport = JSON.parse(window.localStorage.getItem(currentNote))
-        if (jseditor.getValue() != "" && csseditor.getValue() != "" && htmleditor.getValue() != "") {
+        if (jseditor.getValue() != "" &amp;&amp; csseditor.getValue() != "" &amp;&amp; htmleditor.getValue() != "") {
 
             if (compToExport.type == "Component") {
                 toFile = componentSource();
@@ -790,7 +802,7 @@ $(document).ready(function() {
             //console.log(currentNote);
 
         } else {
-            $("#msgBox").html("<h4>You cannot export an empty project.</h4>").slideDown().delay(2500).slideUp();
+            $("#msgBox").html("&lt;h4>You cannot export an empty project.&lt;/h4>").slideDown().delay(2500).slideUp();
 
         }
     });
@@ -1147,7 +1159,7 @@ $(document).ready(function() {
             });*/
 
         }
-        initLog = "\n<------------- init successful ------------->";
+        initLog = "\n&lt;------------- init successful ------------->";
         restoreFromCache();
         getSaved();
 
@@ -1158,4 +1170,26 @@ $(document).ready(function() {
     init(options);
 
 
-});
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addType">addType</a></li><li><a href="global.html#cacheLog">cacheLog</a></li><li><a href="global.html#clear">clear</a></li><li><a href="global.html#createGist">createGist</a></li><li><a href="global.html#csseditor">csseditor</a></li><li><a href="global.html#currentNote">currentNote</a></li><li><a href="global.html#currentUser">currentUser</a></li><li><a href="global.html#deleter">deleter</a></li><li><a href="global.html#desktop">desktop</a></li><li><a href="global.html#export">export</a></li><li><a href="global.html#exportToGitHub">exportToGitHub</a></li><li><a href="global.html#fullScreen">fullScreen</a></li><li><a href="global.html#getSaved">getSaved</a></li><li><a href="global.html#htmleditor">htmleditor</a></li><li><a href="global.html#importer">importer</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#inserter">inserter</a></li><li><a href="global.html#jseditor">jseditor</a></li><li><a href="global.html#kalmeer">kalmeer</a></li><li><a href="global.html#loadProject">loadProject</a></li><li><a href="global.html#logOut">logOut</a></li><li><a href="global.html#makeIdtext">makeId text</a></li><li><a href="global.html#mobile">mobile</a></li><li><a href="global.html#mobileIntsert">mobileIntsert</a></li><li><a href="global.html#Options">Options</a></li><li><a href="global.html#prepareSourcesrc">prepareSource src</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#renderFull">renderFull</a></li><li><a href="global.html#restoreFromCache">restoreFromCache</a></li><li><a href="global.html#restoreFromGitHub">restoreFromGitHub</a></li><li><a href="global.html#saveProject">saveProject</a></li><li><a href="global.html#searcher">searcher</a></li><li><a href="global.html#tablet">tablet</a></li><li><a href="global.html#toggleFocus">toggleFocus</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha13</a> on Sat Jan 10 2015 13:25:15 GMT+0200 (South Africa Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

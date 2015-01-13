@@ -1,0 +1,241 @@
+<!doctype html>
+<html>
+<head>
+<title>appFactory</title>
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link href="../../css/bs.css" rel="stylesheet">
+<link href="../../js/bootstrap-select.css" rel="stylesheet">
+<link rel="import" href="../../js/POLYROOT/bower_components/polymer/polymer.html">
+<link href='http://fonts.googleapis.com/css?family=Exo:400,600italic' rel='stylesheet' type='text/css'>
+
+<style>
+
+#msgBox {
+	background-color: #5CB85C;
+  font-family: 'Exo', sans-serif;
+}
+
+#msgBox span {
+
+  font-family: 'Exo', sans-serif;
+}
+
+#headline {
+  width:100%;
+  height:28px;
+  padding:3px;
+  background-color:#5BC0DE;
+  color:white;
+  border-top: 6px solid #51BF87;
+  margin-bottom: 25px;
+}
+.comps {
+  width:175px;
+  margin-bottom:3px;
+}
+
+#compList {
+  height:600px;
+  width:200px;
+  overflow:scroll;
+  overflow-x:hidden;
+}
+
+#propPanel {
+
+  display:block;
+  width:200px;
+  height:200px;
+}
+
+
+.props {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  /* Required to make elements draggable in old WebKit */
+  -khtml-user-drag: element;
+  -webkit-user-drag: element;
+}
+
+
+</style>
+
+</head>
+<body>
+
+<div id="headline"></div>
+<div id="mainPopup">
+	<div id="msgBox" class="alert alert-success" role="alert"></div>
+	<div class="container-fluid">
+	<div class="row-fluid">
+
+		 
+
+<div class="col-md-1" style="margin-top:-20px!important;margin-left:-30px">
+<div id="propPanel"></div>
+<div id="compList"></div>
+</div>
+
+<div class="col-md-11" id="kalmeerWindow" style="margin-left:25px">
+<div id="appCanvas1" style="display:block;width:300px;height:600px"></div>
+<div id="appCanvas2" style="display:block;width:300px;height:600px"></div>
+<div id="appCanvas3" style="display:block;width:300px;height:600px"></div>
+</div>
+
+<!-- end row div -->
+</div>
+<!-- end container div -->
+</div>
+<!-- end mainPopup div -->
+</div>
+
+
+<style>
+
+
+
+/* Output Area */
+
+
+
+.btn-custom {
+  background-color: #6ad1e8;
+  border-color: #6ad1e8;
+}
+.btn-custom:hover,
+.btn-custom:focus,
+.btn-custom:active,
+.btn-custom.active {
+  background-color: #54cae5;
+  border-color: #3ec3e1;
+}
+.btn-custom.disabled:hover,
+.btn-custom.disabled:focus,
+.btn-custom.disabled:active,
+.btn-custom.disabled.active,
+.btn-custom[disabled]:hover,
+.btn-custom[disabled]:focus,
+.btn-custom[disabled]:active,
+.btn-custom[disabled].active,
+fieldset[disabled] .btn-custom:hover,
+fieldset[disabled] .btn-custom:focus,
+fieldset[disabled] .btn-custom:active,
+fieldset[disabled] .btn-custom.active {
+  background-color: #6ad1e8;
+  border-color: #6ad1e8;
+}
+
+.btn-light {
+  background-color: #c1e9ff;
+  border-color: #c1e9ff;
+}
+.btn-light:hover,
+.btn-light:focus,
+.btn-light:active,
+.btn-light.active {
+  background-color: #a8e0ff;
+  border-color: #8ed7ff;
+}
+.btn-light.disabled:hover,
+.btn-light.disabled:focus,
+.btn-light.disabled:active,
+.btn-light.disabled.active,
+.btn-light[disabled]:hover,
+.btn-light[disabled]:focus,
+.btn-light[disabled]:active,
+.btn-light[disabled].active,
+fieldset[disabled] .btn-light:hover,
+fieldset[disabled] .btn-light:focus,
+fieldset[disabled] .btn-light:active,
+fieldset[disabled] .btn-light.active {
+  background-color: #c1e9ff;
+  border-color: #c1e9ff;
+}
+
+
+</style>
+<style type="text/css">
+	#mainPopup{
+		padding: 10px;
+		height: 100%;
+		width: 100%;
+		
+		font-family: 'Exo', sans-serif;
+	}
+
+
+
+.btn-lighter {
+  background-color: #d3eefc;
+  border-color: #d3eefc;
+}
+.btn-lighter:hover,
+.btn-lighter:focus,
+.btn-lighter:active,
+.btn-lighter.active {
+  background-color: #bbe5fa;
+  border-color: #a3dcf9;
+}
+.btn-lighter.disabled:hover,
+.btn-lighter.disabled:focus,
+.btn-lighter.disabled:active,
+.btn-lighter.disabled.active,
+.btn-lighter[disabled]:hover,
+.btn-lighter[disabled]:focus,
+.btn-lighter[disabled]:active,
+.btn-lighter[disabled].active,
+fieldset[disabled] .btn-lighter:hover,
+fieldset[disabled] .btn-lighter:focus,
+fieldset[disabled] .btn-lighter:active,
+fieldset[disabled] .btn-lighter.active {
+  background-color: #d3eefc;
+  border-color: #d3eefc;
+}
+
+
+	#msgBox {
+		display: none;
+		position: absolute;
+		left:900px;
+		top:-3px;
+		z-index: 10
+	}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+ 
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+}
+ 
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+
+
+</style>
+
+
+
+
+<script type="text/javascript" src="../../js/jq.js"></script>
+<script type="text/javascript" src="../../js/bs.js"></script>
+<script type="text/javascript" src="../../js/fs.js"></script>
+<script type="text/javascript" src="../../js/ok.js"></script>
+<script type="text/javascript" src="../../js/searcher.js"></script>
+<script  type="text/javascript" src="../../js/ace.js"></script>
+
+<script  type="text/javascript" src="../../js/mustache.js"></script>
+
+<script type="text/javascript" src="../../js/builder.js"></script>
+
+
+
+</body>
+</html>
