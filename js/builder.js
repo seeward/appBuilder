@@ -2,58 +2,169 @@ $(document).ready(function() {
 
     var dragEl = "";
 
-
-
     var dragStarted = function(e) {
         dragEl = this;
+        console.log("onStart" + dragEl.id);
         $("#propPanel").html("");
         elDetails = JSON.parse(window.localStorage.getItem(dragEl.id));
 
-        $("#propPanel").append("<p>name: <strong>"+elDetails.name+"</strong></p>");
-        $("#propPanel").append("<p>name: <strong>"+elDetails.type+"</strong></p>");
-        $("#propPanel").append("<p>name: <strong>"+elDetails.author+"</strong></p>");
-        $("#propPanel").append("<p>name: <strong>"+elDetails.createdDate+"</strong></p>");
+        // <div class='input-group input-group-sm'><span class='input-group-addon'>" + + "</span><input type='text' id='" ++ "' class='form-control'/></div>
+
+
+
+        $("#propPanel").append("<div class='input-group input-group-sm'><span class='input-group-addon' style='background-color:#51BF87;width:75px'>Name: </span><input type='text' value='" + elDetails.name + "' class='form-control'/></div>");
+        $("#propPanel").append("<div class='input-group input-group-sm'><span class='input-group-addon' style='background-color:#51BF87;width:75px'>Type:  </span><input type='text' value='" + elDetails.type + "' class='form-control'/></div>");
+        $("#propPanel").append("<div class='input-group input-group-sm'><span class='input-group-addon' style='background-color:#51BF87;width:75px'>Date: </span><input type='text' value='" + elDetails.createdDate+ "' class='form-control'/></div>");
 
 
 
 
+
+        // $("#propPanel").append("<p>created: <strong>"+elDetails.createdDate.substring(0,10)+"</strong></p>");
 
 
         //console.log(dragEl);
         this.style.opacity = '0.4';
-        console.log("dragging...");
+        //console.log("dragging...");
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/html', this.innerHTML);
 
     };
 
+    var dragStartedNew = function(e) {
+        dragEl = this;
+        console.log("onStart" + dragEl.id);
+
+        //console.log(dragEl);
+        this.style.opacity = '0.4';
+        //console.log("dragging...");
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', this.innerHTML);
+
+    };
+
+
+
     var dragEnt = function(e) {
-        console.log("entering...");
+
+        //console.log("entering...");
         e.preventDefault();
 
     };
 
-    var dragOver = function(e){
+    var dragOver = function(e) {
         e.preventDefault();
+        $(this).addClass("over");
         return false;
     };
 
     var dragDrop = function(e) {
-        console.log("dropped...");
+        $(".over").removeClass("over");
+
+        //console.log("dropped...");
+        console.log("should not fire");
         dragEl.style.opacity = '1.0';
-        code = JSON.parse(window.localStorage.getItem(dragEl.id));
+        targetElement = this;
+        registerComponentOnCanvas(targetElement);
+        console.log("onDrop" + dragEl.id);
 
-        html = makeProps(code.props, "appCanvas1");
-        $("#appCanvas1").html(html);
     };
-    document.getElementById("appCanvas1").addEventListener("dragover", dragOver, false);
 
-    document.getElementById("appCanvas1").addEventListener("dragenter", dragEnt, false);
-    document.getElementById("appCanvas1").addEventListener("drop", dragDrop, false);
+    var dragDropNew = function(e) {
+        console.log(dragEl.id);
+        dragEl.remove();
+        $(this).empty();
+        $(".over").removeClass("over");
+        console.log("A test");
+    };
+
+    var dragExit = function(e) {
+        $(".over").removeClass("over");
+        console.log("exited...");
+
+
+    };
+
+    var makePreview = function(js, html, css) {
+
+        css = "<style>" + css + "</style>";
+        js = "<script>" + js + "</script>";
+        srcCode = css + html + js;
+        css = "";
+        js = "";
+        html = "";
+        return srcCode
+
+    };
 
 
 
 
+
+    var registerComponentOnCanvas = function(el) {
+        var html = "";
+        code = JSON.parse(window.localStorage.getItem(dragEl.id));
+        var header = "<h4>" + dragEl.id + "</h4><hr>";
+        if (code.props) {
+            html = makeProps(code.props);
+        }
+        if (code.methods) {
+            html = html + makeMethods(code.methods);
+        }
+        if (code.models) {
+            html = html + makeModels(code.models);
+        }
+        if (code.events) {
+            html = html + makeEvents(code.events);
+        }
+        if (code.bindings) {
+            html = html + makeBindings(code.bindings);
+        }
+        html = "<div style='padding:15px'>" + html + "</div>";
+        var propTemp =
+            '<div class="panel-group" id="accordion' +
+            code.name +
+            '">' +
+            '<div class="panel panel-default">' +
+            '<div class="panel-heading">' +
+            '<h4 class="panel-title">' +
+            '<a data-toggle="collapse" style="text-decoration:none" data-parent="#accordion' +
+            code.name +
+            '" href="#collapseOne' + code.name + '" >' +
+            code.name +
+            '</a></h4></div><div id="collapseOne' + code.name + '" class="panel-collapse collapse"><div class="panel-body">' +
+            html +
+            '</div></div></div></div>'
+
+
+        preview = makePreview(code.js, code.html, code.css);
+        var finalHtml = "<div draggable='true' class='erase' id='" + code.name + "new'>" + propTemp + "<hr>Preview: <br><br>" + preview + "</div>";
+
+        $(el).html(finalHtml);
+        document.getElementById(code.name + 'new').addEventListener('dragstart', dragStartedNew, false);
+
+    };
+
+
+
+    // Set event listeners for drag and drop actions
+    var x = document.getElementsByClassName("canvasSection");
+    var c;
+    for (c = 0; c < x.length; c++) {
+        x[c].addEventListener("dragover", dragOver, false);
+        x[c].addEventListener("dragenter", dragEnt, false);
+        x[c].addEventListener("drop", dragDrop, false);
+        x[c].addEventListener("dragleave", dragExit, false);
+    }
+
+
+
+
+
+    document.getElementById("propPanel").addEventListener("dragover", dragOver, false);
+    document.getElementById("propPanel").addEventListener("dragenter", dragEnt, false);
+    document.getElementById("propPanel").addEventListener("drop", dragDropNew, false);
+    document.getElementById("propPanel").addEventListener("dragleave", dragExit, false);
 
     var getSaved = function() {
         var ind = true;
@@ -76,35 +187,121 @@ $(document).ready(function() {
                 el = $("#" + obj2.name);
 
                 document.getElementById(obj2.name).addEventListener('dragstart', dragStarted, false);
+
+
             }
-
-
-
-
         });
     };
 
 
 
+
+
     var makeProps = function(props, item) {
-        $("#" + item).html("");
-        for (var i = 0; i < props.length; i++) {
+        var bundle = "";
+        var tag = "Properties:<br>";
+        if (props[0] != "") {
+            for (var i = 0; i < props.length; i++) {
 
 
-            brk = document.createElement("br");
-            labl = "<label>" + props[i] + "</label>          ";
-            input = document.createElement("input");
-            input.type = "text";
-            input.id = props[i];
-            input.className = "form_control";
-            input.label = props[i];;
+                brk = "<br>";
+                //labl = "<label>" + props[i] + "</label>          ";
+                input = "<div class='input-group input-group-sm'><span class='input-group-addon'>" + props[i] + "</span><input type='text' id='" + props[i] + "' class='form-control'/></div>";
 
-            //console.log(input);
-            $("#" + item).append(labl);
-            $("#" + item).append(input);
-            $("#" + item).append(brk);
+                bundle = bundle + input;
 
+
+            }
+
+            return "Properties: <br>" + bundle + "<button style='margin-top:10px' class='btn btn-success btn-block setProps'>Set Values</button><br>";
         }
+        return tag + "No Properties<br><br>";
+    };
+
+    var makeEvents = function(props, item) {
+        var bundle = "";
+        var tag = "Events: <br>";
+        if (props[0] != "") {
+            for (var i = 0; i < props.length; i++) {
+
+
+                brk = "<br>";
+                //labl = "<label>" + props[i] + "</label>          ";
+                input = "<li>" + props[i] + "</li>";
+
+                bundle = bundle + input + brk;
+
+            }
+
+            return "Events: <br><ul>" + bundle + "</ul>";
+        }
+
+        return tag + "No Events<br><br>";
+    };
+
+    var makeBindings = function(props, item) {
+        var bundle = "";
+        var tag = "Bindings: <br>";
+        if (props[0] != "") {
+            for (var i = 0; i < props.length; i++) {
+
+
+                brk = "<br>";
+                //labl = "<label>" + props[i] + "</label>          ";
+                input = "<li>" + props[i] + "</li>";
+
+                bundle = bundle + input + brk;
+
+            }
+
+            return "Bindings: <br><ul>" + bundle + "</ul>";
+        }
+
+        return tag + "No Bindings<br><br>";
+    };
+
+
+    var makeMethods = function(props, item) {
+        var bundle = "";
+        var tag = "Methods: <br>";
+        if (props[0] != "") {
+            for (var i = 0; i < props.length; i++) {
+
+
+                brk = "<br>";
+                //labl = "<label>" + props[i] + "</label>          ";
+                input = "<li>" + props[i] + "</li>";
+
+                bundle = bundle + input + brk;
+
+            }
+
+            return "Methods: <br><ul>" + bundle + "</ul>";
+        }
+
+        return tag + "No Methods<br><br>";
+    };
+
+    var makeModels = function(props, item) {
+        var bundle = "";
+        var tag = "Models: <br>";
+        if (props[0] != "") {
+
+            for (var i = 0; i < props.length; i++) {
+
+
+                brk = "<br>";
+                //labl = "<label>" + props[i] + "</label>          ";
+                input = "<li>" + props[i] + "</li>";
+
+                bundle = bundle + input + brk;
+
+            }
+            return tag + "<ul>" + bundle + "</ul>";
+        }
+
+
+        return tag + "No Models<br><br>";
     };
 
 

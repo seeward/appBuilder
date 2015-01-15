@@ -311,14 +311,76 @@ $(document).ready(function() {
         return text;
     }
 
-    var listProps = function(rawJs){
-        var propList = rawJs.substring(rawJs.indexOf("@prop")+5,rawJs.indexOf("@end"));
+    var listProps = function(rawJs) {
+        var propList = rawJs.substring(rawJs.indexOf("@prop") + 5, rawJs.indexOf("@pend"));
         var arrStr = propList.split(/[:]/);
-        for(var i=0; i<arrStr.length; i++){
+        for (var i = 0; i < arrStr.length; i++) {
             console.log(arrStr[i]);
         }
 
         return arrStr;
+    };
+
+        var listBindings = function(rawJs) {
+        var propList6 = rawJs.substring(rawJs.indexOf("@bind") + 5, rawJs.indexOf("@bindend"));
+        var arrBinds = propList6.split(/[:]/);
+        for (var i = 0; i < arrBinds.length; i++) {
+            console.log(arrBinds[i]);
+        }
+
+        return arrBinds;
+    };
+
+    var listEvents = function(rawJs) {
+        var propList5 = rawJs.substring(rawJs.indexOf("@evnt") + 5, rawJs.indexOf("@evntend"));
+        var arrEvents = propList5.split(/[:]/);
+        for (var i = 0; i < arrEvents.length; i++) {
+            console.log(arrEvents[i]);
+        }
+
+        return arrEvents;
+    };
+
+
+    var listCollections = function(rawJs) {
+        var propList4 = rawJs.substring(rawJs.indexOf("@coll") + 5, rawJs.indexOf("@collend"));
+        var arrColl = propList4.split(/[:]/);
+        for (var i = 0; i < arrColl.length; i++) {
+            console.log(arrColl[i]);
+        }
+
+        return arrColl;
+    };
+
+
+    var listViews = function(rawJs) {
+        var propList5 = rawJs.substring(rawJs.indexOf("@view") + 5, rawJs.indexOf("@viewend"));
+        var arrView = propList5.split(/[:]/);
+        for (var i = 0; i < arrView.length; i++) {
+            console.log(arrView[i]);
+        }
+
+        return arrView;
+    };
+
+    var listMethods = function(rawJs) {
+        var propList2 = rawJs.substring(rawJs.indexOf("@meth") + 5, rawJs.indexOf("@mend"));
+        var arrMeth = propList2.split(/[:]/);
+        for (var i = 0; i < arrMeth.length; i++) {
+            console.log(arrMeth[i]);
+        }
+
+        return arrMeth;
+    };
+
+    var listModels = function(rawJs) {
+        var propList3 = rawJs.substring(rawJs.indexOf("@model") + 6, rawJs.indexOf("@modend"));
+        var arrModels = propList3.split(/[:]/);
+        for (var i = 0; i < arrModels.length; i++) {
+            console.log(arrModels[i]);
+        }
+
+        return arrModels;
     };
 
 
@@ -335,16 +397,16 @@ $(document).ready(function() {
             saver.author = us.user;
             saver.createdDate = new Date();
             saver.id = makeId();
-            
+
             saver.type = "Web App";
 
             currentNote = saver.name;
             console.log(currentNote);
             $(".current").html(currentNote);
             window.localStorage.setItem(saver.name, JSON.stringify(saver));
-                $("#msgBox").html("<h4>Project Saved!</h4>").slideDown().delay(2500).slideUp();
+            $("#msgBox").html("<h4>Project Saved!</h4>").slideDown().delay(2500).slideUp();
         } else {
-            
+
             saver = JSON.parse(window.localStorage.getItem(currentNote));
             cacher = JSON.parse(window.localStorage.getItem("cache"));
             saver.html = cacher.html;
@@ -352,11 +414,17 @@ $(document).ready(function() {
             saver.js = cacher.js;
             saver.props = [];
             saver.props = listProps(saver.js);
+            saver.methods = listMethods(saver.js);
+            saver.models = listModels(saver.js);
+            saver.events = listEvents(saver.js);
+            saver.bindings = listBindings(saver.js);
+            saver.collections = listCollections(saver.js);
+            saver.views = listViews(saver.js);
             //saver.id = makeId();
             //console.log(saver.id);
             window.localStorage.setItem(currentNote, JSON.stringify(saver));
             $("#msgBox").html("<h4>Project Saved!</h4>").slideDown().delay(2500).slideUp();
-}
+        }
         //refresh the saved projects list
         getSaved();
 
@@ -391,12 +459,12 @@ $(document).ready(function() {
                     $("#consoleLog").append("<tr><td><a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-lighter' id='" + obj + "'>" + obj + "</a></td></tr>");
 
                     ind = !ind;
-                   
+
                 } else {
 
                     $("#consoleLog").append("<tr><td><a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-light' id='" + obj + "'>" + obj + "</a></td></tr>");
                     ind = !ind;
-                    
+
                 }
 
 
@@ -564,10 +632,10 @@ $(document).ready(function() {
 
         // CSS
 
-        src2 += '<style>'+ css + '</style>';
+        src2 += '<style>' + css + '</style>';
         src2 += html;
 
-        src2 += '<script>'+ js + '</script>';
+        src2 += '<script>' + js + '</script>';
 
         // return prepared src with textarea values inserted
         return src2;
