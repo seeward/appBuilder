@@ -307,7 +307,7 @@ $(document).ready(function() {
 
         for (var i = 0; i < 5; i++)
             text += possible.charAt(Math.floor(Math.random() * possible.length));
-        console.log("New ID generated:  " + text);
+        //console.log("New ID generated:  " + text);
         return text;
     }
 
@@ -315,17 +315,30 @@ $(document).ready(function() {
         var propList = rawJs.substring(rawJs.indexOf("@prop") + 5, rawJs.indexOf("@pend"));
         var arrStr = propList.split(/[:]/);
         for (var i = 0; i < arrStr.length; i++) {
-            console.log(arrStr[i]);
+            //console.log(arrStr[i]);
         }
 
         return arrStr;
     };
 
-        var listBindings = function(rawJs) {
+
+    var listDesc = function(rawJs) {
+        var propList7 = rawJs.substring(rawJs.indexOf("@desc") + 5, rawJs.indexOf("@descend"));
+        var arrDesc = propList7.split(/[:]/);
+        for (var i = 0; i < arrDesc.length; i++) {
+            //console.log(arrStr[i]);
+        }
+
+        return arrDesc;
+    };
+
+
+
+    var listBindings = function(rawJs) {
         var propList6 = rawJs.substring(rawJs.indexOf("@bind") + 5, rawJs.indexOf("@bindend"));
         var arrBinds = propList6.split(/[:]/);
         for (var i = 0; i < arrBinds.length; i++) {
-            console.log(arrBinds[i]);
+            //console.log(arrBinds[i]);
         }
 
         return arrBinds;
@@ -335,39 +348,22 @@ $(document).ready(function() {
         var propList5 = rawJs.substring(rawJs.indexOf("@evnt") + 5, rawJs.indexOf("@evntend"));
         var arrEvents = propList5.split(/[:]/);
         for (var i = 0; i < arrEvents.length; i++) {
-            console.log(arrEvents[i]);
+            //console.log(arrEvents[i]);
         }
 
         return arrEvents;
     };
 
 
-    var listCollections = function(rawJs) {
-        var propList4 = rawJs.substring(rawJs.indexOf("@coll") + 5, rawJs.indexOf("@collend"));
-        var arrColl = propList4.split(/[:]/);
-        for (var i = 0; i < arrColl.length; i++) {
-            console.log(arrColl[i]);
-        }
-
-        return arrColl;
-    };
 
 
-    var listViews = function(rawJs) {
-        var propList5 = rawJs.substring(rawJs.indexOf("@view") + 5, rawJs.indexOf("@viewend"));
-        var arrView = propList5.split(/[:]/);
-        for (var i = 0; i < arrView.length; i++) {
-            console.log(arrView[i]);
-        }
 
-        return arrView;
-    };
 
     var listMethods = function(rawJs) {
         var propList2 = rawJs.substring(rawJs.indexOf("@meth") + 5, rawJs.indexOf("@mend"));
         var arrMeth = propList2.split(/[:]/);
         for (var i = 0; i < arrMeth.length; i++) {
-            console.log(arrMeth[i]);
+            //console.log(arrMeth[i]);
         }
 
         return arrMeth;
@@ -377,7 +373,7 @@ $(document).ready(function() {
         var propList3 = rawJs.substring(rawJs.indexOf("@model") + 6, rawJs.indexOf("@modend"));
         var arrModels = propList3.split(/[:]/);
         for (var i = 0; i < arrModels.length; i++) {
-            console.log(arrModels[i]);
+            //console.log(arrModels[i]);
         }
 
         return arrModels;
@@ -390,7 +386,7 @@ $(document).ready(function() {
      */
     var saveProject = function() {
         render();
-        if (!window.localStorage.getItem(currentNote)) {
+        if (!window.localStorage.getItem("$$"+currentNote)) {
             us = JSON.parse(window.localStorage.getItem("u"));
             saver = JSON.parse(window.localStorage.getItem("cache"));
             saver.name = prompt("Name project:");
@@ -403,11 +399,11 @@ $(document).ready(function() {
             currentNote = saver.name;
             console.log(currentNote);
             $(".current").html(currentNote);
-            window.localStorage.setItem(saver.name, JSON.stringify(saver));
+            window.localStorage.setItem("$$"+saver.name, JSON.stringify(saver));
             $("#msgBox").html("<h4>Project Saved!</h4>").slideDown().delay(2500).slideUp();
         } else {
 
-            saver = JSON.parse(window.localStorage.getItem(currentNote));
+            saver = JSON.parse(window.localStorage.getItem("$$"+currentNote));
             cacher = JSON.parse(window.localStorage.getItem("cache"));
             saver.html = cacher.html;
             saver.css = cacher.css;
@@ -418,11 +414,11 @@ $(document).ready(function() {
             saver.models = listModels(saver.js);
             saver.events = listEvents(saver.js);
             saver.bindings = listBindings(saver.js);
-            saver.collections = listCollections(saver.js);
-            saver.views = listViews(saver.js);
+            saver.description = listDesc(saver.js);
+
             //saver.id = makeId();
             //console.log(saver.id);
-            window.localStorage.setItem(currentNote, JSON.stringify(saver));
+            window.localStorage.setItem("$$"+currentNote, JSON.stringify(saver));
             $("#msgBox").html("<h4>Project Saved!</h4>").slideDown().delay(2500).slideUp();
         }
         //refresh the saved projects list
@@ -449,25 +445,19 @@ $(document).ready(function() {
             //window.localStorage.setItem(obj,JSON.stringify(projToTag));
             //console.log(projToTag.id);
 
-            if (obj === "u" || obj === "cache" || obj.match(/Parse/g)) {
-
-            } else {
-
-
+            if (obj.match(/$$/g)) {
                 if (ind == true) {
 
-                    $("#consoleLog").append("<tr><td><a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-lighter' id='" + obj + "'>" + obj + "</a></td></tr>");
+                    $("#consoleLog").append("<tr><td><a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-lighter' id='" + obj.substr(2) + "'>" + obj.substr(2) + "</a></td></tr>");
 
                     ind = !ind;
 
                 } else {
 
-                    $("#consoleLog").append("<tr><td><a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-light' id='" + obj + "'>" + obj + "</a></td></tr>");
+                    $("#consoleLog").append("<tr><td><a style='margin-top:7px;width:150px' class='noteRow btn btn-block btn-light' id='" + obj.substr(2) + "'>" + obj.substr(2) + "</a></td></tr>");
                     ind = !ind;
 
                 }
-
-
             }
         });
     };
@@ -678,7 +668,7 @@ $(document).ready(function() {
 
     $("#shower").click(function() {
         console.log(currentNote);
-        var curr = JSON.parse(window.localStorage.getItem(currentNote));
+        var curr = JSON.parse(window.localStorage.getItem("$$"+currentNote));
         if (curr != null) {
             $("#projDetails").modal("show");
             console.log(curr.name, curr.type, curr.author);
@@ -700,7 +690,7 @@ $(document).ready(function() {
         $("#projDetails").modal('hide');
 
 
-        var cur = JSON.parse(window.localStorage.getItem(currentNote));
+        var cur = JSON.parse(window.localStorage.getItem("$$"+currentNote));
         cur.name = $("#projName").val();
         cur.author = $("#projAuthor").val();
         cur.type = $("#projType").val();
@@ -709,7 +699,7 @@ $(document).ready(function() {
             cur.date - new Date();
         }
 
-        window.localStorage.setItem(currentNote, JSON.stringify(cur));
+        window.localStorage.setItem("$$"+currentNote, JSON.stringify(cur));
         console.log("e:saveProjDetails");
         $("#msgBox").html("<h4>Project details saved!</h4>").slideDown().delay(2500).slideUp();
 
@@ -843,7 +833,7 @@ $(document).ready(function() {
         e.preventDefault();
         var toFile = "";
         console.log("e:prepare");
-        var compToExport = JSON.parse(window.localStorage.getItem(currentNote))
+        var compToExport = JSON.parse(window.localStorage.getItem("$$"+currentNote))
         if (jseditor.getValue() != "" && csseditor.getValue() != "" && htmleditor.getValue() != "") {
 
             if (compToExport.type == "Component") {
@@ -912,20 +902,29 @@ $(document).ready(function() {
      * @global
      * @param event - insert Polymer element starter files
      */
-    $("#inserter").click(function(e) {
-        console.log("e:inserter");
+    $("#insertTag").click(function(e) {
+        console.log("e:insertTag");
         e.preventDefault();
-        jseditor.setValue("");
-        csseditor.setValue("");
+        current = jseditor.getValue();
+
+
+
+        var tabTemp = "//@prop@pend\n//@meth@mend\n//@model@modend\n//@evnt@evntend\n//@view@viewend\n//@coll@collend\m//@bind@bindend\n\n";
         //htmleditor.setValue(polyTemp);
-        var newTemp = $('#polymerTemp').html();
-        newTemp = newTemp.replace(/CHANGE/g, "script");
-        var template = newTemp;
-        Mustache.parse(template);
-        var rendered = Mustache.render(template, {});
-        htmleditor.setValue(rendered);
+        current = tabTemp + current;
+        jseditor.setValue(current);
 
     });
+
+    var addNamespace = function() {
+        keys = Object.keys(localStorage);
+        $.each(keys, function(i, obj) {
+            codeBlock = JSON.parse(window.localStorage.getItem(obj));
+            window.localStorage.setItem("$$" + obj, JSON.stringify(codeBlock));
+            window.localStorage.removeItem(obj);
+
+        });
+    }
 
 
     /**
@@ -972,7 +971,7 @@ $(document).ready(function() {
         console.log("e:loadProject");
         note = $(this).text();
         $("#currentInfo").html("");
-        newNote = JSON.parse(window.localStorage.getItem(note));
+        newNote = JSON.parse(window.localStorage.getItem("$$"+note));
 
         js = newNote.js;
         css = newNote.css;
@@ -1184,7 +1183,7 @@ $(document).ready(function() {
      */
     var init = function(options) {
 
-
+        //addNamespace();
         kalmeerMode = options.kalmeerMode;
 
         if (kalmeerMode == true) {
@@ -1205,7 +1204,7 @@ $(document).ready(function() {
                 password: currentUserCache.pass
             });
 
-            // helper method to verify that guthub api is connected on init()
+            // helper method to verify that github api is connected on init()
             getZ();
 
             // GIST list for logged in user FOR LATER USE

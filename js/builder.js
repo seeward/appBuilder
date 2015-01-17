@@ -14,13 +14,7 @@ $(document).ready(function() {
 
         $("#propPanel").append("<div class='input-group input-group-sm'><span class='input-group-addon' style='background-color:#51BF87;width:75px'>Name: </span><input type='text' value='" + elDetails.name + "' class='form-control'/></div>");
         $("#propPanel").append("<div class='input-group input-group-sm'><span class='input-group-addon' style='background-color:#51BF87;width:75px'>Type:  </span><input type='text' value='" + elDetails.type + "' class='form-control'/></div>");
-        $("#propPanel").append("<div class='input-group input-group-sm'><span class='input-group-addon' style='background-color:#51BF87;width:75px'>Date: </span><input type='text' value='" + elDetails.createdDate+ "' class='form-control'/></div>");
-
-
-
-
-
-        // $("#propPanel").append("<p>created: <strong>"+elDetails.createdDate.substring(0,10)+"</strong></p>");
+        $("#propPanel").append("<div class='input-group input-group-sm'><span class='input-group-addon' style='background-color:#51BF87;width:75px'>Date: </span><input type='text' value='" + elDetails.createdDate + "' class='form-control'/></div>");
 
 
         //console.log(dragEl);
@@ -105,8 +99,13 @@ $(document).ready(function() {
         var html = "";
         code = JSON.parse(window.localStorage.getItem(dragEl.id));
         var header = "<h4>" + dragEl.id + "</h4><hr>";
+
+        if (code.description) {
+            html = html + makeDesc(code.description);
+
+        }
         if (code.props) {
-            html = makeProps(code.props);
+            html = html + makeProps(code.props);
         }
         if (code.methods) {
             html = html + makeMethods(code.methods);
@@ -117,6 +116,7 @@ $(document).ready(function() {
         if (code.events) {
             html = html + makeEvents(code.events);
         }
+
         if (code.bindings) {
             html = html + makeBindings(code.bindings);
         }
@@ -260,6 +260,29 @@ $(document).ready(function() {
         return tag + "No Bindings<br><br>";
     };
 
+    var makeDesc = function(props, item) {
+         bundler = "";
+
+        
+            
+
+
+        
+
+                inputer = "<p><strong>" + props[0] + "</strong></p>";
+
+                bundler = "Description: <br>" + bundler + inputer + "<br>";
+
+            console.log(bundler);
+
+            return bundler;
+       
+
+        
+    };
+
+
+
 
     var makeMethods = function(props, item) {
         var bundle = "";
@@ -294,7 +317,7 @@ $(document).ready(function() {
                 //labl = "<label>" + props[i] + "</label>          ";
                 input = "<li>" + props[i] + "</li>";
 
-                bundle = bundle + input + brk;
+                bundle = bundle + input;
 
             }
             return tag + "<ul>" + bundle + "</ul>";

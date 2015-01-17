@@ -6,7 +6,7 @@
 <link rel="icon" href="favicon.ico" type="image/x-icon">
 <link href="../../css/bs.css" rel="stylesheet">
 <link href="../../js/bootstrap-select.css" rel="stylesheet">
-<link rel="import" href="../../js/POLYROOT/bower_components/polymer/polymer.html">
+
 <link href='http://fonts.googleapis.com/css?family=Exo:400,600italic' rel='stylesheet' type='text/css'>
 
 <style>
@@ -215,9 +215,8 @@
 
 
 <li>
-    <div class="btn-group" role="group">
-    <button role="button" class="btn btn-info" style="margin-left:1090px" id="go"><span class="glyphicon glyphicon-play"></span></button>
-    <button  role="button"class="btn btn-success" id="saver"><span class="glyphicon glyphicon-save"></span></button>
+    
+    <button  role="button" style="margin-left:1100px" class="btn btn-success" id="saver"><span class="glyphicon glyphicon-play"></span></button>
     <button  role="button"class="btn btn-warning" id="clear"><span class="glyphicon glyphicon-fire"></span></button>
     <button  role="button"class="btn btn-danger" id="deleter" ><span class="glyphicon glyphicon-remove"></span></a>
       
@@ -230,11 +229,15 @@
     <span class="glyphicon glyphicon-plus"> </span><span class="caret" style="margin-left:3px"></span>
   </button>
   <ul class="dropdown-menu dropdown-menu-right" role="menu">
-    <li><a href="#" id="inserter">Polymer Element</a></li>
-    <li><a href="#" id="amx">AMX Component</a></li>
-    <li><a href="#" id="jsp">JSP Page</a></li>
-    <li><a href="#" id="mobiInsert">Mobile App</a></li>
-    <li><a href="#" id="mobiInsert">Web App</a></li>
+    <li role="presentation" style="margin-top:5px;border-bottom:1px solid #5BC0DE"class="dropdown-header">Insert Code</li>
+    <li><a href="#" id="insertTag">Properties Tag</a></li>
+    <li><a href="#" id="insertPage">Page</a></li>
+    <li><a href="#" id="insertList">List</a></li>
+    <li><a href="#" id="insertRouter">Router</a></li>
+    <li><a href="#" id="insertConnect">Connect</a></li>
+    <li role="presentation" style="margin-top:15px;border-bottom:1px solid #51BF87"class="dropdown-header">Boilerplate</li>
+        <li><a href="#" id="insertWeb">Web App</a></li>
+    <li><a href="#" id="insertMobi">Mobile App</a></li>
   </ul>
 </div></li>
   </ul>

@@ -12,10 +12,46 @@
   <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js"></script>
 
+</head>
+<body>
+
+<div id="headline"></div>
+<div id="mainPopup">
+	<div id="msgBox" class="alert alert-success" role="alert"></div>
+	<div class="container-fluid">
+	<div class="row-fluid">
+
+		 
+
+<div class="col-md-2" style="margin-top:-20px!important;margin-left:-30px">
+<div id="propPanel"></div>
+<div id="compList"></div>
+</div>
+
+<div class="col-md-10" style="overflow-x:scroll" id="kalmeerWindow">
+
+  <div style="width:3000px">
+    <div id="appCanvas1" class="canvasSection" style="display:block;margin-right:25px;width:350px;height:800px!important;float:left"></div>
+    <div id="appCanvas2" class="canvasSection" style="display:block;;margin-right:25px;width:350px;height:800px!important;float:left"></div>
+   <div id="appCanvas3" class="canvasSection" style="display:block;;margin-right:25px;width:350px;height:800px!important;float:left"></div>
+   <div id="appCanvas4" class="canvasSection" style="display:block;;margin-right:25px;width:350px;height:800px!important;float:left"></div>
+
+</div>
+</div>
+
+<!-- end row div -->
+</div>
+<!-- end container div -->
+</div>
+<!-- end mainPopup div -->
+</div>
+
+
+
 <style>
 
 #msgBox {
-	background-color: #5CB85C;
+  background-color: #5CB85C;
   font-family: 'Exo', sans-serif;
 }
 
@@ -76,43 +112,6 @@
 }
 
 
-</style>
-
-</head>
-<body>
-
-<div id="headline"></div>
-<div id="mainPopup">
-	<div id="msgBox" class="alert alert-success" role="alert"></div>
-	<div class="container-fluid">
-	<div class="row-fluid">
-
-		 
-
-<div class="col-md-2" style="margin-top:-20px!important;margin-left:-30px">
-<div id="propPanel"></div>
-<div id="compList"></div>
-</div>
-
-<div class="col-md-10" id="kalmeerWindow" style="margin-left:25px">
-
-    <div id="appCanvas1" class="canvasSection" style="display:block;margin-right:25px;width:350px;height:800px!important;float:left"></div>
-    <div id="appCanvas2" class="canvasSection" style="display:block;;margin-right:25px;width:350px;height:800px!important;float:left"></div>
-   <div id="appCanvas3" class="canvasSection" style="display:block;;margin-right:25px;width:350px;height:800px!important;float:left"></div>
-   <div id="appCanvas4" class="canvasSection" style="display:block;;margin-right:25px;width:350px;height:800px!important;float:left"></div>
-
-</div>
-
-<!-- end row div -->
-</div>
-<!-- end container div -->
-</div>
-<!-- end mainPopup div -->
-</div>
-
-
-<style>
-/* Output Area */
 
 .btn-custom {
   background-color: #6ad1e8;
