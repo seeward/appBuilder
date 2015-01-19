@@ -6,7 +6,7 @@ $(document).ready(function() {
         dragEl = this;
         console.log("onStart" + dragEl.id);
         $("#propPanel").html("");
-        elDetails = JSON.parse(window.localStorage.getItem(dragEl.id));
+        elDetails = JSON.parse(window.localStorage.getItem("##"+dragEl.id));
 
         // <div class='input-group input-group-sm'><span class='input-group-addon'>" + + "</span><input type='text' id='" ++ "' class='form-control'/></div>
 
@@ -97,7 +97,7 @@ $(document).ready(function() {
 
     var registerComponentOnCanvas = function(el) {
         var html = "";
-        code = JSON.parse(window.localStorage.getItem(dragEl.id));
+        code = JSON.parse(window.localStorage.getItem("##"+dragEl.id));
         var header = "<h4>" + dragEl.id + "</h4><hr>";
 
         if (code.description) {
@@ -173,23 +173,16 @@ $(document).ready(function() {
         keys = Object.keys(localStorage);
         var rows = keys.length;
         $.each(keys, function(i, obj) {
-            //used to tag projects with unique ids
-            var obj2 = JSON.parse(window.localStorage.getItem(obj));
-            //projToTag.id = makeId();
-            //window.localStorage.setItem(obj,JSON.stringify(projToTag));
-            //console.log(projToTag.id);
 
-            if (obj === "u" || obj === "cache" || obj.match(/Parse/g)) {
+             if (obj.match(/##/g)) {
+           
+ $("#compList").append("<button draggable='true' style='cursor: move' class='btn btn-custom comps' id='" + obj.substr(2) + "'>" + obj.substr(2) + "</button>");
+                el = $("#" + obj.substr(2));
 
-            } else {
+                document.getElementById(obj.substr(2)).addEventListener('dragstart', dragStarted, false);
 
-                $("#compList").append("<button draggable='true' style='cursor: move' class='btn btn-custom comps' id='" + obj2.name + "'>" + obj + "</button>");
-                el = $("#" + obj2.name);
+}
 
-                document.getElementById(obj2.name).addEventListener('dragstart', dragStarted, false);
-
-
-            }
         });
     };
 

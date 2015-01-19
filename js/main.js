@@ -393,7 +393,7 @@ $(document).ready(function() {
             saver.author = us.user;
             saver.createdDate = new Date();
             saver.id = makeId();
-
+            saver.exported = false;
             saver.type = "Web App";
 
             currentNote = saver.name;
@@ -416,12 +416,19 @@ $(document).ready(function() {
             saver.bindings = listBindings(saver.js);
             saver.description = listDesc(saver.js);
 
+
             //saver.id = makeId();
             //console.log(saver.id);
+           
             window.localStorage.setItem("$$"+currentNote, JSON.stringify(saver));
+
+
             $("#msgBox").html("<h4>Project Saved!</h4>").slideDown().delay(2500).slideUp();
         }
         //refresh the saved projects list
+                               if(saver.exported == true){
+            $("#exportComp").trigger("click");
+           }
         getSaved();
 
     };
@@ -995,6 +1002,20 @@ $(document).ready(function() {
      * @param event - event delete button is pressed
      */
 
+     $("#exportComp").click(function(e){
+
+        e.preventDefault();
+        exportCode = JSON.parse(window.localStorage.getItem("$$"+currentNote));
+        exportCode.exported = true;
+        window.localStorage.setItem("$$"+ currentNote,JSON.stringify(exportCode));
+
+        window.localStorage.setItem("##"+ currentNote,JSON.stringify(exportCode));
+
+        $("#msgBox").html("Project Successfully Exported!").slideDown().delay(2500).slideUp();
+
+
+     });
+
     $("#deleter").click(function() {
         console.log("e:deleter");
         jseditor.setValue("");
@@ -1003,7 +1024,7 @@ $(document).ready(function() {
 
 
         if (currentNote != "cache") {
-            window.localStorage.removeItem(currentNote);
+            window.localStorage.removeItem("$$"+currentNote);
         }
         currentNote = "Empty Project";
         $(".current").html(currentNote);
